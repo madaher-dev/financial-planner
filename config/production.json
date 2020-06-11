@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://madaher:5nFyXRGrnrJXekRi@cluster0-zth24.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "nOLqYqrxPYKPLLkiniUvUh4ARWuP4pVl"
+}
