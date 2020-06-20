@@ -1,15 +1,13 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import ContactContext from '../../context/contact/contactContext';
 import ContactItem from './ContactItem';
 import Spinner from '../layout/Spinner';
-const Contacts = () => {
-  // To have access to any states or method or actions in contactContext ex: array contacts
-  const contactContext = useContext(ContactContext);
 
-  // Pulling array contacts
-  const { contacts, filtered, getContacts, loading } = contactContext;
+import { getContacts } from '../../actions/contactActions';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
+const Contacts = ({ contacts, filtered, loading, getContacts }) => {
   useEffect(() => {
     getContacts();
     // eslint-disable-next-line
@@ -50,4 +48,18 @@ const Contacts = () => {
     </Fragment>
   );
 };
-export default Contacts;
+
+Contacts.propTypes = {
+  getContacts: PropTypes.func.isRequired,
+  contacts: PropTypes.array,
+  filtered: PropTypes.array,
+  loading: PropTypes.bool,
+};
+
+const mapStateToProps = (state) => ({
+  contacts: state.contacts.contacts,
+  filtered: state.contacts.filtered,
+  loading: state.contacts.loading,
+});
+
+export default connect(mapStateToProps, { getContacts })(Contacts);

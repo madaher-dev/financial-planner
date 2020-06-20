@@ -1,11 +1,24 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import ContactContext from '../../context/contact/contactContext';
+import React from 'react';
+// import {
+//   useContacts,
+//   deleteContact,
+//   setCurrent,
+//   clearCurrent,
+// } from '../../context/contact/ContactState';
 
-const ContactItem = ({ contact }) => {
+import {
+  deleteContact,
+  setCurrent,
+  clearCurrent,
+} from '../../actions/contactActions';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+const ContactItem = ({ contact, deleteContact, setCurrent, clearCurrent }) => {
   // getting context to edit and delete
-  const contactContext = useContext(ContactContext);
-  const { deleteContact, setCurrent, clearCurrent } = contactContext;
+
+  // we just need the contact dispatch without state.
+  //const contactDispatch = useContacts()[1];
   // Pull out what you need from contact by destructuring
   const { _id, name, email, phone, type } = contact;
 
@@ -56,6 +69,20 @@ const ContactItem = ({ contact }) => {
 };
 
 ContactItem.propTypes = {
+  contacts: PropTypes.array.isRequired,
+  filtered: PropTypes.array,
+  loading: PropTypes.bool,
   contact: PropTypes.object.isRequired,
 };
-export default ContactItem;
+
+const mapStateToProps = (state) => ({
+  contacts: state.contacts.contacts,
+  filtered: state.contacts.filtered,
+  loading: state.contacts.loading,
+});
+
+export default connect(mapStateToProps, {
+  deleteContact,
+  setCurrent,
+  clearCurrent,
+})(ContactItem);

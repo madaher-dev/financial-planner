@@ -1,18 +1,10 @@
-import React, { useContext, useRef, useEffect } from 'react';
-import contactContext from '../../context/contact/contactContext';
+import React, { useRef } from 'react';
+import { filterContacts, clearFilter } from '../../actions/contactActions';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-const ContactFilter = () => {
-  const ContactContext = useContext(contactContext);
+const ContactFilter = ({ filterContacts, clearFilter }) => {
   const text = useRef('');
-
-  const { filterContacts, clearFilter, filtered } = ContactContext;
-
-  useEffect(() => {
-    if (filtered === null) {
-      text.current.value = '';
-    }
-  });
-
   const onChange = (e) => {
     if (text.current.value !== '') {
       filterContacts(e.target.value);
@@ -22,7 +14,7 @@ const ContactFilter = () => {
   };
 
   return (
-    <form>
+    <form onSubmit={(e) => e.preventDefault()}>
       <input
         type='text'
         ref={text}
@@ -33,4 +25,12 @@ const ContactFilter = () => {
   );
 };
 
-export default ContactFilter;
+ContactFilter.propTypes = {
+  filterContacts: PropTypes.func.isRequired,
+  clearFilter: PropTypes.func.isRequired,
+};
+
+export default connect(null, {
+  filterContacts,
+  clearFilter,
+})(ContactFilter);

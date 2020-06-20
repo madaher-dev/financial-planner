@@ -1,17 +1,23 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import Spinner from '../layout/Spinner';
 import { Route, Redirect } from 'react-router-dom';
-import AuthContext from '../../context/auth/authContext';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { loadUser } from '../../actions/userActions';
+//import { useAuth } from '../../context/auth/AuthState';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  const authContext = useContext(AuthContext);
-  const { isAuthenticated, loading, loadUser } = authContext;
-
-  useEffect(() => {
+const PrivateRoute = ({
+  isAuthenticated,
+  loading,
+  loadUser,
+  component: Component,
+  ...rest
+}) => {
+  // const [authState] = useAuth();
+  // const { isAuthenticated, loading } = authState;
+  if (localStorage.token) {
     loadUser();
-    // eslint-disable-next-line
-  }, []);
-
+  }
   return (
     <Route
       {...rest}
@@ -28,4 +34,15 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export default PrivateRoute;
+PrivateRoute.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  loading: PropTypes.bool,
+  loadUser: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.users.isAuthenticated,
+  loading: state.users.loading,
+});
+
+export default connect(mapStateToProps, { loadUser })(PrivateRoute);

@@ -9,9 +9,17 @@ import {
   CONTACT_ERROR,
   GET_CONTACTS,
   CLEAR_CONTACTS,
-} from '../Types';
+} from '../actions/Types';
 
-export default (state, action) => {
+const initialState = {
+  contacts: null,
+  current: null,
+  filtered: null,
+  error: null,
+  loading: true,
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_CONTACT:
       return {
