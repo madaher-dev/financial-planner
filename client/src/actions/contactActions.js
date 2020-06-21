@@ -48,13 +48,14 @@ export const deleteContact = (id) => async (dispatch) => {
 
 // Set Current Contact
 export const setCurrent = (contact) => (dispatch) => {
-  dispatch({ type: SET_CURRENT, payload: contact });
+  dispatch({
+    type: SET_CURRENT,
+    payload: contact,
+  });
   window.scrollTo(0, 0);
 };
 // Clear Current Contact
-export const clearCurrent = () => (dispatch) => {
-  dispatch({ type: CLEAR_CURRENT });
-};
+export const clearCurrent = () => ({ type: CLEAR_CURRENT });
 // Update Contact
 export const updateContact = (contact) => async (dispatch) => {
   const config = {
@@ -75,15 +76,11 @@ export const updateContact = (contact) => async (dispatch) => {
 };
 
 // Filter Contacts
-export const filterContacts = (text) => (dispatch) => {
-  dispatch({ type: FILTER_CONTACTS, payload: text });
-};
+export const filterContacts = (text) => ({
+  type: FILTER_CONTACTS,
+  payload: text,
+});
 // Clear Filter
-export const clearFilter = () => (dispatch) => {
-  dispatch({ type: CLEAR_FILTER });
-};
-
+export const clearFilter = () => ({ type: CLEAR_FILTER });
 // Clear Contacts
-export const clearContacts = () => (dispatch) => {
-  dispatch({ type: CLEAR_CONTACTS });
-};
+export const clearContacts = () => ({ type: CLEAR_CONTACTS });

@@ -9,7 +9,6 @@ import {
   CLEAR_ERRORS,
 } from './Types';
 import axios from 'axios';
-import setAuthToken from '../utils/setauthtoken';
 
 // Register User
 
@@ -25,7 +24,6 @@ export const registerUser = (user) => async (dispatch) => {
       type: REGISTER_SUCCESS,
       payload: res.data, //Token
     });
-    setAuthToken(res.data.token);
 
     dispatch(loadUser());
   } catch (err) {
@@ -46,7 +44,6 @@ export const loginUser = (user) => async (dispatch) => {
   };
   try {
     const res = await axios.post('/api/auth', user, config);
-    setAuthToken(res.data.token);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data, //Token
@@ -78,7 +75,7 @@ export const loadUser = () => async (dispatch) => {
 
 // Logout
 
-export const logout = () => (dispatch) => dispatch({ type: LOGOUT });
+export const logout = () => ({ type: LOGOUT });
 
 // Clear Errors
-export const clearErrors = () => (dispatch) => dispatch({ type: CLEAR_ERRORS });
+export const clearErrors = () => ({ type: CLEAR_ERRORS });
