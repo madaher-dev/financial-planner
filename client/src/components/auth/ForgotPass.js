@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { forgotPass, clearErrors } from '../../actions/userActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { registerUser, clearErrors } from '../../actions/userActions';
 import { Redirect } from 'react-router-dom';
 import {
   TextField,
@@ -22,22 +22,20 @@ const useStyles = makeStyles((theme) => ({
   text: {
     textAlign: 'center',
   },
+  forgot: {
+    float: 'right',
+  },
 }));
 
-const Register = ({
-  registerUser,
-  isAuthenticated,
-  error,
+const ForgotPass = ({
+  forgotPass,
   clearErrors,
   setAlert,
+  forgot,
+  error,
+  isAdmin,
+  isAuthenticated,
 }) => {
-  const [user, setUser] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password2: '',
-  });
-
   useEffect(() => {
     if (error) {
       setAlert(error.errors[0].msg, 'error');
@@ -45,18 +43,35 @@ const Register = ({
     }
   }, [error, setAlert, clearErrors]);
 
-  const { name, email, password, password2 } = user;
+  useEffect(() => {
+    if (forgot) {
+      setAlert('Reset Email Sent', 'success');
+    }
+    clearErrors();
+  }, [forgot, setAlert, clearErrors]);
+
+  const [user, setUser] = useState({
+    email: '',
+  });
+
+  const { email } = user;
   const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
     e.preventDefault();
-
-    registerUser(user);
+    if (email === '') {
+      setAlert('Please entert your email', 'error');
+    } else {
+      forgotPass({
+        email,
+      });
+    }
   };
 
   const classes = useStyles();
-
-  if (isAuthenticated) {
+  if (isAdmin) {
+    return <Redirect to='/admin' />;
+  } else if (isAuthenticated) {
     return <Redirect to='/contacts' />;
   } else {
     return (
@@ -66,32 +81,18 @@ const Register = ({
           <form className={classes.root} onSubmit={onSubmit}>
             <div className={classes.text}>
               <Typography gutterBottom variant='h3'>
-                Register{' '}
+                Forgot{' '}
                 <Typography color='primary' variant='inherit'>
-                  User
+                  Password
                 </Typography>
               </Typography>
             </div>
             <Divider variant='middle' />
             <div>
               <TextField
-                id='outlined-name'
-                label='Name'
-                variant='outlined'
-                type='text'
-                name='name'
-                value={name}
-                onChange={onChange}
-                fullWidth
-                autoComplete='name'
-              />
-            </div>
-            <div>
-              <TextField
-                id='outlined-email'
+                id='outlined-required'
                 label='Email Address'
                 variant='outlined'
-                autoComplete='email'
                 type='email'
                 name='email'
                 value={email}
@@ -99,32 +100,7 @@ const Register = ({
                 fullWidth
               />
             </div>
-            <div>
-              <TextField
-                id='outlined-password-input'
-                label='Password'
-                type='password'
-                autoComplete='current-password'
-                variant='outlined'
-                name='password'
-                value={password}
-                onChange={onChange}
-                fullWidth
-              />
-            </div>
-            <div>
-              <TextField
-                id='outlined-password-confirm'
-                label='Confirm Password'
-                type='password'
-                autoComplete='confirm-password'
-                variant='outlined'
-                name='password2'
-                value={password2}
-                onChange={onChange}
-                fullWidth
-              />
-            </div>
+
             <div>
               <Button
                 variant='contained'
@@ -132,7 +108,7 @@ const Register = ({
                 type='submit'
                 fullWidth
               >
-                Register
+                Send Email
               </Button>
             </div>
           </form>
@@ -143,10 +119,12 @@ const Register = ({
   }
 };
 
-Register.propTypes = {
-  registerUser: PropTypes.func.isRequired,
+ForgotPass.propTypes = {
+  forgotPass: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   error: PropTypes.object,
+  isAdmin: PropTypes.bool,
+  forgot: PropTypes.bool,
   setAlert: PropTypes.func.isRequired,
   clearErrors: PropTypes.func.isRequired,
 };
@@ -154,10 +132,12 @@ Register.propTypes = {
 const mapStateToProps = (state) => ({
   isAuthenticated: state.users.isAuthenticated,
   error: state.users.error,
+  isAdmin: state.users.isAdmin,
+  forgot: state.users.forgot,
 });
 
 export default connect(mapStateToProps, {
-  registerUser,
+  forgotPass,
   clearErrors,
   setAlert,
-})(Register);
+})(ForgotPass);

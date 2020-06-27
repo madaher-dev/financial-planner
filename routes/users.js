@@ -5,6 +5,7 @@ const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const User = require('../modules/User');
+const auth = require('../middleware/auth');
 
 // @route   POST api/users
 // @desc    Register a user
@@ -21,15 +22,20 @@ router.post(
   ],
   async (req, res) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        errors: errors.array(),
+      });
     }
     const { name, email, password } = req.body;
     try {
       let user = await User.findOne({ email });
 
       if (user) {
-        return res.status(400).json({ msg: 'User already exists' });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'User already exists' }] });
       }
       user = new User({
         name,
@@ -62,5 +68,19 @@ router.post(
     }
   }
 );
+// @route   GET api/users/planners
+// @desc    Get all Planners
+// @access  Private
+router.get('/palnners', auth, async (req, res) => {
+  try {
+    const planners = await User.find({ type: 'Planner' }).sort({
+      date: -1,
+    });
+    res.json(planners);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;

@@ -7,6 +7,14 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_ERRORS,
+  OPEN_DRAWER,
+  CLOSE_DRAWER,
+  IS_ADMIN,
+  FORGOT_FAIL,
+  FORGOT,
+  GET_PLANNERS,
+  PLANNER_ERROR,
+  ADMIN_LOADED,
 } from './Types';
 import axios from 'axios';
 
@@ -29,7 +37,7 @@ export const registerUser = (user) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: REGISTER_FAIL,
-      payload: err.response.data.msg,
+      payload: err.response.data,
     });
   }
 };
@@ -44,34 +52,90 @@ export const loginUser = (user) => async (dispatch) => {
   };
   try {
     const res = await axios.post('/api/auth', user, config);
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: res.data, //Token
-    });
-    dispatch(loadUser());
+
+    if (res.data.admin) {
+      dispatch({
+        type: IS_ADMIN,
+        payload: res.data.token, //Token
+      });
+      // dispatch(loadUser());
+    } else {
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data.token, //Token
+      });
+      dispatch(loadUser());
+    }
   } catch (err) {
     dispatch({
       type: LOGIN_FAIL,
-      payload: err.response.data.msg,
+      payload: err.response.data,
     });
   }
 };
+
+// Forgot Password
+
+export const forgotPass = (user) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    const res = await axios.put('/api/auth/forgot', user, config);
+
+    dispatch({
+      type: FORGOT,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: FORGOT_FAIL,
+      payload: err.response.data,
+    });
+  }
+};
+
 // Load User
 
 export const loadUser = () => async (dispatch) => {
   try {
     const res = await axios.get('/api/auth');
-    dispatch({
-      type: USER_LOADED,
-      payload: res.data,
-    });
+
+    if (res.data.admin) {
+      dispatch({
+        type: ADMIN_LOADED,
+        payload: res.data,
+      });
+    } else {
+      dispatch({
+        type: USER_LOADED,
+        payload: res.data,
+      });
+    }
   } catch (err) {
     dispatch({
       type: AUTH_ERROR,
-      payload: err.response.data.msg,
+      payload: err.response.data,
     });
   }
 };
+
+// Get Planners
+export const getPlanners = () => async (dispatch) => {
+  try {
+    const res = await axios.get('/api/users/palnners');
+    dispatch({ type: GET_PLANNERS, payload: res.data });
+  } catch (err) {
+    dispatch({ type: PLANNER_ERROR, payload: err.response.data });
+  }
+};
+
+// // load user on first run or refresh
+// if (loading) {
+//   loadUser();
+// }
 
 // Logout
 
@@ -79,3 +143,9 @@ export const logout = () => ({ type: LOGOUT });
 
 // Clear Errors
 export const clearErrors = () => ({ type: CLEAR_ERRORS });
+
+// Open Drawer
+export const openDrawer = () => ({ type: OPEN_DRAWER });
+
+// Open Drawer
+export const closeDrawer = () => ({ type: CLOSE_DRAWER });

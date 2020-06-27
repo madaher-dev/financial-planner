@@ -9,9 +9,9 @@ const Welcome = ({ loadUser }) => {
   }
   return (
     <div>
-      <h1>Welcome to Contact Keeper</h1>
+      <h1>Welcome to Financial Planner</h1>
       <p className='my-1'>
-        This is a Full Stack React App for keeping contacts
+        This is a Full Stack React App for financial planning
       </p>
     </div>
   );

@@ -18,6 +18,16 @@ const UserSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  type: {
+    type: String,
+    default: 'Planner',
+  },
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
+  },
 });
 
 module.exports = mongoose.model('users', UserSchema);

@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { loadUser } from '../../actions/userActions';
 
-const PrivateRoute = ({
+const AdminRoute = ({
   isAuthenticated,
   loading,
   loadUser,
+  isAdmin,
   component: Component,
   ...rest
 }) => {
@@ -21,25 +22,27 @@ const PrivateRoute = ({
       render={(props) =>
         loading ? (
           <Spinner />
-        ) : isAuthenticated ? (
+        ) : isAuthenticated && isAdmin ? (
           <Component {...props} />
         ) : (
-          <Redirect to='/login' />
+          <Redirect to='/contacts' />
         )
       }
     />
   );
 };
 
-PrivateRoute.propTypes = {
+AdminRoute.propTypes = {
   isAuthenticated: PropTypes.bool,
   loading: PropTypes.bool,
   loadUser: PropTypes.func.isRequired,
+  isAdmin: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.users.isAuthenticated,
+  isAdmin: state.users.isAdmin,
   loading: state.users.loading,
 });
 
-export default connect(mapStateToProps, { loadUser })(PrivateRoute);
+export default connect(mapStateToProps, { loadUser })(AdminRoute);
