@@ -2,6 +2,7 @@ node_modules/
 .history/
 
 /client/build
+/config
 
 .DS_Store
 /client/.env.local

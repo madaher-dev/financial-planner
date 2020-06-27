@@ -83,22 +83,6 @@ router.post(
   }
 );
 
-//test
-
-router.route('/test').put(function (req, res) {
-  User.findByIdAndUpdate(
-    '5ef488ba3ccd3906b094e080',
-    { password: '000009' },
-    function (err, result) {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send(result);
-      }
-    }
-  );
-});
-
 // @route   Post api/users/forgot
 // @desc    Check if User Exists and Send Email
 // @access  Public
@@ -132,7 +116,7 @@ router.put(
         resetPasswordExpires: Date.now() + 3600000,
       };
 
-      const result = await User.findByIdAndUpdate(
+      const addToken = await User.findByIdAndUpdate(
         user.id,
         { $set: payload },
         { new: true }
@@ -154,7 +138,6 @@ router.put(
       const mailOptions = {
         from: 'info@butula.net',
         to: `${user.email}`,
-        // to: 'madaher@alumni.ie.edu',
         subject: 'Link To Reset Password',
         text:
           'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
