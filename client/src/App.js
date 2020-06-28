@@ -20,7 +20,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Alerts from './components/layout/Alerts';
 import { Typography, Container, Link, Box } from '@material-ui/core';
-import Planners from './components/Planners/Planners'
+import Planners from './components/Planners/Planners';
+import ResetPassword from './components/auth/ResetPassword';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -76,8 +77,17 @@ const App = () => {
                   <Route exact path='/welcome' component={Welcome} />
                   <PrivateRoute exact path='/contacts' component={Home} />
                   <AdminRoute exact path='/admin' component={Admin} />
-                  <AdminRoute exact path='/admin/planners' component={Planners} />
+                  <AdminRoute
+                    exact
+                    path='/admin/planners'
+                    component={Planners}
+                  />
                   <Route exact path='/about' component={About} />
+                  <Route
+                    exact
+                    path='/reset/:email_token'
+                    component={ResetPassword}
+                  />
 
                   <Route exact path='/register' component={Register} />
                   <Route exact path='/login' component={Login} />

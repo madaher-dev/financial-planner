@@ -9,9 +9,6 @@ import Button from '@material-ui/core/Button';
 
 const PlannerForm = (props) => {
   // const [open, setOpen] = React.useState(false);
-  // const handleClose = () => {
-  //   props.open = false;
-  // };
 
   return (
     <Dialog

@@ -163,4 +163,103 @@ router.put(
   }
 );
 
+// @route   Post api/auth/forgot
+// @desc    Check if email token valid and return username
+// @access  Public
+
+router.get('/reset', async (req, res) => {
+  const user = await User.findOne(
+    {
+      resetPasswordToken: req.query.resetPasswordToken,
+      resetPasswordExpires: { $gt: Date.now() },
+    },
+    { email: 1 }
+  );
+  //console.log(user);
+  if (user == null) {
+    //console.error('password reset link is invalid or has expired');
+    return res
+      .status(403)
+      .send('password reset link is invalid or has expired');
+  } else {
+    //console.log(user);
+    return res.status(200).send({
+      email: user.email,
+      message: 'password reset link a-ok',
+    });
+  }
+});
+
+// @route   Post api/auth/updatePasswordViaEmail
+// @desc    Update Password via email
+// @access  Public
+
+router.put(
+  '/updatePasswordViaEmail',
+
+  async (req, res) => {
+    // const errors = validationResult(req);
+
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json(errors.array());
+    // }
+    try {
+      //console.log(req.body);
+      const user = await User.findOne(
+        {
+          email: req.body.email,
+        }
+        // { email: 1 }
+      );
+
+      if (user == null) {
+        console.error('password reset link is invalid or has expired');
+        return res
+          .status(403)
+          .send('password reset link is invalid or has expired');
+      } else if (user != null) {
+        console.log('user exists in db');
+
+        const payload = {
+          password: null,
+          resetPasswordToken: null,
+          resetPasswordExpires: null,
+        };
+
+        const salt = await bcrypt.genSalt(10);
+        payload.password = await bcrypt.hash(req.body.password, salt);
+
+        const updatePass = await User.findByIdAndUpdate(
+          user.id,
+          { $set: payload },
+          { new: true }
+        );
+
+        const payload2 = {
+          user: {
+            id: user.id,
+          },
+        };
+        jwt.sign(
+          payload2,
+          config.get('jwtSecret'),
+          { expiresIn: 360000 },
+          (err, token) => {
+            if (err) throw err;
+            return res.json({ token });
+          }
+        );
+
+        // return res
+        //   .status(200)
+        //   .send({ message: 'password updated', token: token });
+        //setAlert
+      }
+    } catch (err) {
+      console.error('no user exists in db to update');
+      return res.status(401).json('no user exists in db to update');
+    }
+  }
+);
+
 module.exports = router;
