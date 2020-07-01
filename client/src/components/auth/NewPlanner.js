@@ -52,7 +52,7 @@ const ResetPassword = ({ error, setAlert, loadPlanner }) => {
   useEffect(() => {
     const checkToken = async () => {
       try {
-        const response = await axios.get('../api/auth/reset', {
+        const response = await axios.get('../api/auth/resetPlanner', {
           params: {
             resetPasswordToken: email_token,
           },

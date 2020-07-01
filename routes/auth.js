@@ -5,7 +5,7 @@ const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const auth = require('../middleware/auth');
-const User = require('../modules/User');
+const Planner = require('../modules/Planner');
 const nodemailer = require('nodemailer');
 var crypto = require('crypto');
 
@@ -14,7 +14,7 @@ var crypto = require('crypto');
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await Planner.findById(req.user.id).select('-password');
     if (user.type === 'Admin') {
       res.json({ user, admin: true });
     } else {
@@ -46,7 +46,7 @@ router.post(
     }
     const { email, password } = req.body;
     try {
-      let user = await User.findOne({ email });
+      let user = await Planner.findOne({ email });
       if (!user) {
         return res
           .status(400)
@@ -97,7 +97,7 @@ router.put(
     }
     const { email } = req.body;
     try {
-      let user = await User.findOne({ email });
+      let user = await Planner.findOne({ email });
       if (!user) {
         return res.status(400).json({
           errors: [
@@ -116,7 +116,7 @@ router.put(
         resetPasswordExpires: Date.now() + 3600000,
       };
 
-      const addToken = await User.findByIdAndUpdate(
+      const addToken = await Planner.findByIdAndUpdate(
         user.id,
         { $set: payload },
         { new: true }
@@ -163,12 +163,73 @@ router.put(
   }
 );
 
-// @route   Post api/auth/forgot
+// @route   Post api/users/sendMail
+// @desc    Send Reset New Planner Email
+// @access  Public
+
+router.put('/sendMail', async (req, res) => {
+  const { email } = req.body;
+  try {
+    let user = await Planner.findOne({ email });
+
+    var email_token = crypto.randomBytes(64).toString('hex');
+
+    const payload = {
+      resetPasswordToken: email_token,
+    };
+
+    const addToken = await Planner.findByIdAndUpdate(
+      user.id,
+      { $set: payload },
+      { new: true }
+    );
+
+    const transporter = nodemailer.createTransport({
+      host: 'mail.butula.net',
+      port: 587,
+      secure: false, // upgrade later with STARTTLS
+      auth: {
+        user: config.get('EMAIL_ADDRESS'),
+        pass: config.get('EMAIL_PASSWORD'),
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    const mailOptions = {
+      from: 'info@butula.net',
+      to: `${user.email}`,
+      subject: 'Pringles: Planner Account Created',
+      text:
+        'You are receiving this because we have created a new Planner Account for you\n\n' +
+        'Please click on the following link, or paste this into your browser to reset your password and complete the process :\n\n' +
+        `http://localhost:3000/newplanner/${email_token}\n\n` +
+        'If you did not request this, please ignore this email.\n',
+    };
+
+    console.log('sending mail');
+
+    transporter.sendMail(mailOptions, (err, response) => {
+      if (err) {
+        console.error('there was an error: ', err);
+      } else {
+        console.log('here is the res: ', response);
+        return res.status(200).json('new planner account email sent');
+      }
+    });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+  }
+});
+
+// @route   Post api/auth/reset
 // @desc    Check if email token valid and return username
 // @access  Public
 
 router.get('/reset', async (req, res) => {
-  const user = await User.findOne(
+  const user = await Planner.findOne(
     {
       resetPasswordToken: req.query.resetPasswordToken,
       resetPasswordExpires: { $gt: Date.now() },
@@ -189,6 +250,29 @@ router.get('/reset', async (req, res) => {
     });
   }
 });
+// @route   Post api/auth/resetPlanner
+// @desc    Check if email token valid and return username for New Planner
+// @access  Public
+
+router.get('/resetPlanner', async (req, res) => {
+  const user = await Planner.findOne(
+    {
+      resetPasswordToken: req.query.resetPasswordToken,
+    },
+    { email: 1 }
+  );
+  //console.log(user);
+  if (user == null) {
+    //console.error('password reset link is invalid or has expired');
+    return res.status(403).send('password reset link is invalid ');
+  } else {
+    //console.log(user);
+    return res.status(200).send({
+      email: user.email,
+      message: 'password reset link a-ok',
+    });
+  }
+});
 
 // @route   Post api/auth/updatePasswordViaEmail
 // @desc    Update Password via email
@@ -198,14 +282,8 @@ router.put(
   '/updatePasswordViaEmail',
 
   async (req, res) => {
-    // const errors = validationResult(req);
-
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json(errors.array());
-    // }
     try {
-      //console.log(req.body);
-      const user = await User.findOne(
+      const user = await Planner.findOne(
         {
           email: req.body.email,
         }
@@ -229,7 +307,7 @@ router.put(
         const salt = await bcrypt.genSalt(10);
         payload.password = await bcrypt.hash(req.body.password, salt);
 
-        const updatePass = await User.findByIdAndUpdate(
+        const updatePass = await Planner.findByIdAndUpdate(
           user.id,
           { $set: payload },
           { new: true }
@@ -249,11 +327,6 @@ router.put(
             return res.json({ token });
           }
         );
-
-        // return res
-        //   .status(200)
-        //   .send({ message: 'password updated', token: token });
-        //setAlert
       }
     } catch (err) {
       console.error('no user exists in db to update');

@@ -1,31 +1,36 @@
 import React from 'react';
-import Spinner from '../layout/Spinner';
+import Spinner from '../layout/SpinnerPadded';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { loadUser } from '../../actions/userActions';
+import { loadPlanner } from '../../actions/plannerActions';
 
 const AdminRoute = ({
   isAuthenticated,
   loading,
-  loadUser,
+  loadPlanner,
   isAdmin,
   component: Component,
   ...rest
 }) => {
-  if (localStorage.token) {
-    loadUser();
-  }
+  React.useEffect(() => {
+    // if (localStorage.token && !isAuthenticated) {
+    //   loadPlanner();
+    // }
+    loadPlanner();
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <Route
       {...rest}
       render={(props) =>
-        loading ? (
-          <Spinner />
-        ) : isAuthenticated && isAdmin ? (
+        isAuthenticated && isAdmin && !loading ? (
           <Component {...props} />
-        ) : (
+        ) : !loading ? (
           <Redirect to='/contacts' />
+        ) : (
+          <Spinner />
         )
       }
     />
@@ -35,14 +40,14 @@ const AdminRoute = ({
 AdminRoute.propTypes = {
   isAuthenticated: PropTypes.bool,
   loading: PropTypes.bool,
-  loadUser: PropTypes.func.isRequired,
+  loadPlanner: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.users.isAuthenticated,
-  isAdmin: state.users.isAdmin,
-  loading: state.users.loading,
+  isAuthenticated: state.planners.isAuthenticated,
+  isAdmin: state.planners.isAdmin,
+  loading: state.planners.loading,
 });
 
-export default connect(mapStateToProps, { loadUser })(AdminRoute);
+export default connect(mapStateToProps, { loadPlanner })(AdminRoute);

@@ -3,26 +3,26 @@ import Spinner from '../layout/Spinner';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { loadUser } from '../../actions/userActions';
-
+//import { loadUser } from '../../actions/userActions';
+import { loadPlanner } from '../../actions/plannerActions';
 const PrivateRoute = ({
   isAuthenticated,
   loading,
-  loadUser,
+  loadPlanner,
   component: Component,
   ...rest
 }) => {
-  if (localStorage.token) {
-    loadUser();
+  if (localStorage.token && !isAuthenticated) {
+    loadPlanner();
   }
   return (
     <Route
       {...rest}
       render={(props) =>
-        loading ? (
-          <Spinner />
-        ) : isAuthenticated ? (
+        isAuthenticated && !loading ? (
           <Component {...props} />
+        ) : isAuthenticated && loading ? (
+          <Spinner />
         ) : (
           <Redirect to='/login' />
         )
@@ -34,12 +34,12 @@ const PrivateRoute = ({
 PrivateRoute.propTypes = {
   isAuthenticated: PropTypes.bool,
   loading: PropTypes.bool,
-  loadUser: PropTypes.func.isRequired,
+  loadPlanner: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.users.isAuthenticated,
-  loading: state.users.loading,
+  isAuthenticated: state.planners.isAuthenticated,
+  loading: state.planners.loading,
 });
 
-export default connect(mapStateToProps, { loadUser })(PrivateRoute);
+export default connect(mapStateToProps, { loadPlanner })(PrivateRoute);

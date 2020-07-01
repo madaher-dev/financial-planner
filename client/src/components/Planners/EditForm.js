@@ -8,9 +8,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  addPlanner,
+  editPlanner,
   clearErrors,
-  clearAdd,
   setLoading,
 } from '../../actions/plannerActions';
 import { setAlert } from '../../actions/alertActions';
@@ -20,6 +19,8 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -53,44 +54,69 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
   },
 }));
-const PlannerForm = ({
-  addPlanner,
+const EditForm = ({
+  editPlanner,
   error,
   clearErrors,
   setAlert,
   open,
   handleClose,
-  add,
-  addLoading,
+  edit,
+  planner,
+  deleted,
   setLoading,
+  editLoading,
 }) => {
-  // const [open, setOpen] = React.useState(false);
   const classes = useStyles();
-  const [planner, setPlanner] = useState({
+  //Setting form data on form open
+  React.useEffect(() => {
+    setAdmin(false);
+    if (planner) {
+      if (planner.type === 'Admin') {
+        setAdmin(true);
+      }
+
+      setPlanner({
+        name: planner.name,
+        email: planner.email,
+        title: planner.title,
+        company: planner.company,
+        phone: planner.phone,
+        comments: planner.comments,
+        id: planner._id,
+        type: planner.type,
+      });
+    }
+
+    // eslint-disable-next-line
+  }, [planner]);
+
+  const [plannerData, setPlanner] = useState({
     name: '',
     email: '',
     title: '10',
     company: '',
     phone: '',
     comments: '',
+    id: '',
+    type: '',
   });
 
-  const { title, name, email, company, phone, comments } = planner;
+  const [admin, setAdmin] = useState(false);
+
+  const { title, name, email, company, phone, comments } = plannerData;
 
   const onChange = (e) => {
-    setPlanner({ ...planner, [e.target.name]: e.target.value });
+    setPlanner({ ...plannerData, [e.target.name]: e.target.value });
   };
-
-  const clearForm = () => {
-    setPlanner({
-      name: '',
-      email: '',
-      title: '10',
-      company: '',
-      phone: '',
-      comments: '',
-    });
-    clearAdd();
+  const onAdminChange = (e) => {
+    if (e.target.checked) {
+      setPlanner({ ...plannerData, type: 'Admin' });
+      setAdmin(true);
+    } else {
+      setPlanner({ ...plannerData, type: 'Planner' });
+      setAdmin(false);
+    }
   };
 
   useEffect(() => {
@@ -98,17 +124,18 @@ const PlannerForm = ({
       if (error.errors) {
         setAlert(error.errors[0].msg, 'error');
       }
-    } else if (add) {
-      setAlert('Planner Added', 'success');
-      clearForm();
+    } else if (edit) {
+      setAlert('Planner successfully edited', 'success');
+    } else if (deleted) {
+      setAlert('Planner Deleted', 'warning');
     }
     clearErrors();
-  }, [error, add]);
+  }, [error, edit, setAlert, clearErrors, deleted]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading();
-    addPlanner(planner);
+    editPlanner(plannerData);
   };
 
   return (
@@ -117,12 +144,9 @@ const PlannerForm = ({
       onClose={handleClose}
       aria-labelledby='form-dialog-title'
     >
-      <DialogTitle id='form-dialog-title'>Add New Planner</DialogTitle>
+      <DialogTitle id='form-dialog-title'>Edit Planner</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          To add a new planner insert their info and they will receive an email
-          to activate their account, set a new password and login.
-        </DialogContentText>
+        <DialogContentText>Edit Planner Data</DialogContentText>
         <FormControl className={classes.formControl}>
           <InputLabel id='title-label'>Title</InputLabel>
           <Select
@@ -197,44 +221,53 @@ const PlannerForm = ({
           onChange={onChange}
           fullWidth
         />
+
+        <FormControlLabel
+          control={
+            <Switch checked={admin} onChange={onAdminChange} name='admin' />
+          }
+          label='Is Admin'
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color='primary'>
-          Cancel
+          Close
         </Button>
         <Button onClick={onSubmit} color='primary'>
-          Add Planner
+          Edit Planner
         </Button>
       </DialogActions>
-      <Backdrop className={classes.backdrop} open={addLoading}>
+      <Backdrop className={classes.backdrop} open={editLoading}>
         <CircularProgress color='inherit' />
       </Backdrop>
     </Dialog>
   );
 };
 
-PlannerForm.propTypes = {
-  addPlanner: PropTypes.func.isRequired,
+EditForm.propTypes = {
+  editPlanner: PropTypes.func.isRequired,
   error: PropTypes.object,
   setAlert: PropTypes.func.isRequired,
   clearErrors: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  add: PropTypes.bool.isRequired,
-  addLoading: PropTypes.bool.isRequired,
+  edit: PropTypes.bool.isRequired,
+  deleted: PropTypes.bool.isRequired,
   setLoading: PropTypes.func.isRequired,
+  editLoading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.planners.isAuthenticated,
   error: state.planners.error,
-  add: state.planners.add,
-  addLoading: state.planners.formLoading,
+  edit: state.planners.edit,
+  deleted: state.planners.delete,
+  editLoading: state.planners.formLoading,
 });
 
 export default connect(mapStateToProps, {
-  addPlanner,
+  editPlanner,
   clearErrors,
   setAlert,
   setLoading,
-})(PlannerForm);
+})(EditForm);

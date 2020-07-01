@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { logout, openDrawer } from '../../actions/userActions';
+//import { logout, openDrawer } from '../../actions/userActions';
 import { clearContacts } from '../../actions/contactActions';
+import { logout, openDrawer } from '../../actions/plannerActions';
 import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import clsx from 'clsx';
@@ -129,10 +130,10 @@ const Navbar = ({
           color='inherit'
           noWrap
           className={classes.links}
-          to='/contacts'
+          to='/admin/planners'
           component={Link}
         >
-          Hello {user && user.user.name}
+          Hello {user && user.name}
         </Typography>
         <IconButton
           onClick={onLogout}
@@ -180,8 +181,9 @@ const Navbar = ({
     <AppBar
       position='absolute'
       className={clsx(classes.appBar, open && classes.appBarShift)}
+      color='primary'
     >
-      {isAuthenticated ? authLinks : guestLinks}
+      {isAuthenticated && user ? authLinks : guestLinks}
     </AppBar>
   );
 };
@@ -197,10 +199,10 @@ Navbar.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.users.isAuthenticated,
-  isAdmin: state.users.isAdmin,
-  open: state.users.open,
-  user: state.users.user,
+  isAuthenticated: state.planners.isAuthenticated,
+  isAdmin: state.planners.isAdmin,
+  open: state.planners.open,
+  user: state.planners.user,
 });
 export default connect(mapStateToProps, { logout, clearContacts, openDrawer })(
   Navbar

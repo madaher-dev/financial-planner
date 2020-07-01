@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { closeDrawer } from '../../actions/userActions';
-
+//import { closeDrawer } from '../../actions/userActions';
+import { closeDrawer } from '../../actions/plannerActions';
 import { connect } from 'react-redux';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
@@ -95,6 +95,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AuthDrawer = ({ closeDrawer, open, isAuthenticated, isAdmin }) => {
+  React.useEffect(() => {
+    return () => closeDrawer();
+  }, [closeDrawer]);
+
   const classes = useStyles();
   const guestDrawer = <Fragment></Fragment>;
   const adminDrawer = (
@@ -149,8 +153,8 @@ AuthDrawer.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.users.isAuthenticated,
-  isAdmin: state.users.isAdmin,
-  open: state.users.open,
+  isAuthenticated: state.planners.isAuthenticated,
+  isAdmin: state.planners.isAdmin,
+  open: state.planners.open,
 });
 export default connect(mapStateToProps, { closeDrawer })(AuthDrawer);
