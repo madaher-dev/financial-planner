@@ -36,6 +36,8 @@ router.post(
           .status(400)
           .json({ errors: [{ msg: 'User already exists' }] });
       }
+
+      // Notice there is not Type. Adding type will create security breach. Create new private route if needed
       user = new Planner({
         name,
         email,
@@ -76,10 +78,15 @@ router.post(
 // @access  Private
 router.get('/sub', auth, async (req, res) => {
   try {
-    const planners = await Planner.find().sort({
-      date: -1,
-    });
-    res.json(planners);
+    // check if user is an admin (from token) and show all planners
+    user = await Planner.findById(req.user.id);
+
+    if (user.type === 'Admin') {
+      const planners = await Planner.find().sort({
+        date: -1,
+      });
+      res.json(planners);
+    } else res.status(401).json({ msg: 'Unauthorized' });
   } catch (err) {
     console.log(err.message);
     res.status(500).send('Server Error');
@@ -88,12 +95,15 @@ router.get('/sub', auth, async (req, res) => {
 
 // @route   POST api/planners/edit
 // @desc    Edit a planner
-// @access  Public
+// @access  Private
 router.post(
   '/edit',
   [
-    check('name', 'Please include a name').not().isEmpty(),
-    check('email', 'Please include a valid email').isEmail(),
+    auth,
+    [
+      check('name', 'Please include a name').not().isEmpty(),
+      check('email', 'Please include a valid email').isEmail(),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -102,6 +112,7 @@ router.post(
         errors: errors.array(),
       });
     }
+
     const { name, type, email, id, title, company, phone, comments } = req.body;
     const plannerFields = {};
     if (name) plannerFields.name = name;
@@ -113,48 +124,39 @@ router.post(
     if (comments) plannerFields.comments = comments;
 
     try {
-      planner = await Planner.findByIdAndUpdate(
-        id,
-        { $set: plannerFields },
-        { new: true }
-      );
-      res.json(planner);
+      // check if user is an admin (from token)
+      user = await Planner.findById(req.user.id);
+
+      if (user.type === 'Admin') {
+        planner = await Planner.findByIdAndUpdate(
+          id,
+          { $set: plannerFields },
+          { new: true }
+        );
+        res.json(planner);
+      } else res.status(401).json({ msg: 'Unauthorized' });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
   }
 );
-// @route   GET api/planners/planners
-// @desc    Get all Planners
-// @access  Private
-router.get('/sub', auth, async (req, res) => {
-  try {
-    const planners = await Planner.find({ type: 'Planner' }).sort({
-      date: -1,
-    });
-    res.json(planners);
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).send('Server Error');
-  }
-});
 
-// @route   DELETE api/contacts/:id
-// @desc    Delete a contact Contact
+// @route   DELETE api/planners/:id
+// @desc    Delete a planner
 // @access  Private
 router.delete('/:id', auth, async (req, res) => {
   try {
-    let planner = await Planner.findById(req.params.id);
-    if (!planner) return res.status(404).json({ msg: 'Planner not found' });
+    // check if user is an admin (from token)
+    user = await Planner.findById(req.user.id);
 
-    // // Make sure is Admin
-    // if (req.user.id) {
-    //   return res.status(401).json({ msg: 'Not Authorized' });
-    // }
+    if (user.type === 'Admin') {
+      let planner = await Planner.findById(req.params.id);
+      if (!planner) return res.status(404).json({ msg: 'Planner not found' });
 
-    await Planner.findByIdAndRemove(req.params.id);
-    res.json({ msg: 'Planner Removed' });
+      await Planner.findByIdAndRemove(req.params.id);
+      res.json({ msg: 'Planner Removed' });
+    } else res.status(401).json({ msg: 'Unauthorized' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
