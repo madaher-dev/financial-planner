@@ -10,7 +10,7 @@ const nodemailer = require('nodemailer');
 var crypto = require('crypto');
 
 // @route   GET api/auth
-// @desc    Get logged in user
+// @desc    Get logged in user (Login)
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
@@ -27,7 +27,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // @route   Post api/users
-// @desc    Auth user & get tocken
+// @desc    Auth user & get tocken (Register)
 // @access  Public
 
 router.post(
@@ -84,7 +84,7 @@ router.post(
 );
 
 // @route   Post api/users/forgot
-// @desc    Check if User Exists and Send Email
+// @desc    Check if User Exists and Send Email (Forget Pass)
 // @access  Public
 
 router.put(
@@ -276,7 +276,7 @@ router.get('/resetPlanner', async (req, res) => {
 
 // @route   Post api/auth/updatePasswordViaEmail
 // @desc    Update Password via email
-// @access  Public
+// @access  Public (requires email token)
 
 router.put(
   '/updatePasswordViaEmail',
@@ -286,6 +286,7 @@ router.put(
       const user = await Planner.findOne(
         {
           email: req.body.email,
+          resetPasswordToken: req.body.email_token,
         }
         // { email: 1 }
       );

@@ -15,8 +15,10 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { setAlert } from '../../actions/alertActions';
 //import { loadUser, clearErrors } from '../../actions/userActions';
-import { loadPlanner, clearErrors } from '../../actions/plannerActions';
+import { loadPlanner, setLoading } from '../../actions/plannerActions';
 import { Container } from '@material-ui/core';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,9 +33,13 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(20),
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
 
-const ResetPassword = ({ error, setAlert, loadPlanner }) => {
+const ResetPassword = ({ setAlert, loadPlanner, setLoading, formLoading }) => {
   // Pull Token from URL
   let { email_token } = useParams();
 
@@ -124,7 +130,10 @@ const ResetPassword = ({ error, setAlert, loadPlanner }) => {
       setAlert('Passwords do not match', 'error');
     } else if (password.length < 6) {
       setAlert('Please enter a password with 6 or more characters', 'error');
-    } else resetPassword({ email, password });
+    } else {
+      setLoading();
+      resetPassword({ email, password, email_token });
+    }
   };
 
   const classes = useStyles();
@@ -200,6 +209,9 @@ const ResetPassword = ({ error, setAlert, loadPlanner }) => {
             </Grid>
             <Grid item xs={false} sm={4} />
           </Grid>
+          <Backdrop className={classes.backdrop} open={formLoading}>
+            <CircularProgress color='inherit' />
+          </Backdrop>
         </Container>
       </Fragment>
     );
@@ -207,16 +219,18 @@ const ResetPassword = ({ error, setAlert, loadPlanner }) => {
 };
 
 ResetPassword.propTypes = {
-  error: PropTypes.object,
   setAlert: PropTypes.func.isRequired,
-  clearErrors: PropTypes.func.isRequired,
   loadPlanner: PropTypes.func.isRequired,
+  formLoading: PropTypes.bool.isRequired,
+  setLoading: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  error: state.planners.error,
+  formLoading: state.planners.formLoading,
 });
 
-export default connect(mapStateToProps, { setAlert, clearErrors, loadPlanner })(
-  ResetPassword
-);
+export default connect(mapStateToProps, {
+  setAlert,
+  loadPlanner,
+  setLoading,
+})(ResetPassword);

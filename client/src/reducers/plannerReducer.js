@@ -75,6 +75,7 @@ export default (state = initialState, action) => {
         error: null,
         isAdmin: false,
         open: true,
+        formLoading: false,
         token: localStorage.getItem('token'),
       };
     case ADMIN_LOADED:
@@ -86,6 +87,7 @@ export default (state = initialState, action) => {
         error: null,
         isAdmin: true,
         open: true,
+        formLoading: false,
         token: localStorage.getItem('token'),
       };
     case REGISTER_FAIL:
@@ -104,6 +106,7 @@ export default (state = initialState, action) => {
         open: false,
         isAdmin: false,
         forgot: false,
+        formLoading: false,
       };
     case CLEAR_ERRORS:
       return {
@@ -130,6 +133,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         forgot: true,
+        formLoading: false,
       };
     case GET_PLANNERS:
       return {

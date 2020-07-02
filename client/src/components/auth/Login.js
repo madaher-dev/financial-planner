@@ -56,7 +56,7 @@ const Login = ({
 
   useEffect(() => {
     if (error) {
-      if (error.erros) {
+      if (error.errors) {
         setAlert(error.errors[0].msg, 'error');
         clearErrors();
       }
