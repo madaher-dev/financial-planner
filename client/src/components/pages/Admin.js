@@ -9,6 +9,7 @@ import AuthDrawer from '../material/AuthDrawer';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
 import AdminWelcome from '../layout/AdminWelcome';
+import Settings from '../Planners/Settings';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +47,7 @@ const Admin = ({ getPlanners, match, openDrawer }) => {
         <Container maxWidth='lg' className={classes.container}>
           <Switch>
             <Route exact path={`${match.path}/planners`} component={Planners} />
+            <Route exact path={`${match.path}/settings`} component={Settings} />
             <Route exact path={`${match.path}/`} component={AdminWelcome} />
           </Switch>
         </Container>

@@ -40,6 +40,10 @@ const PlannerSchema = mongoose.Schema({
   comments: {
     type: String,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'planners',
+  },
 });
 
 module.exports = mongoose.model('planners', PlannerSchema);

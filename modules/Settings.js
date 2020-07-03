@@ -4,77 +4,94 @@ const SettingsSchema = mongoose.Schema({
   ageAtDeath: {
     type: Number,
     required: true,
+    default: 60,
   },
   costInflation: {
     type: Number,
     required: true,
+    default: 0,
   },
-  edInflation: {
+  eduInflation: {
     type: Number,
     required: true,
+    default: 0,
   },
   timeHorizon: {
     type: Number,
     required: true,
+    default: 0,
   },
   modelYearEnd: {
-    type: Number,
+    type: Date,
     required: true,
+    default: '2078-01-01T00:00:00.000+00:00',
   },
   mpaCashSTD: {
     type: Number,
     required: true,
+    default: 0,
   },
   mpaLTD: {
     type: Number,
     required: true,
+    default: 0,
   },
   mpaEquities: {
     type: Number,
     required: true,
+    default: 0,
   },
   cmeCashSTD: {
     type: Number,
     required: true,
+    default: 0,
   },
   cmeLTD: {
     type: Number,
     required: true,
+    default: 0,
   },
   cmeEquities: {
     type: Number,
     required: true,
+    default: 0,
   },
   expectedReturn: {
     type: Number,
     required: true,
+    default: 0,
   },
   childrenAgeStart: {
     type: Number,
     required: true,
+    default: 0,
   },
   childrenNumYearsSchool: {
     type: Number,
     required: true,
+    default: 0,
   },
   childrenSchoolEnd: {
     type: Number,
     required: true,
+    default: 0,
   },
   childrenNumYearsUni: {
     type: Number,
     required: true,
+    default: 0,
   },
   childrenUniEnd: {
     type: Number,
     required: true,
+    default: 0,
   },
   goalOne: {
-    type: Number,
+    type: String,
     required: true,
   },
   goalTwo: {
-    type: Number,
+    type: String,
     required: true,
   },
   goalThree: {

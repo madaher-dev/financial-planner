@@ -9,6 +9,7 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { Link } from 'react-router-dom';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 export const mainListItems = (
   <div>
@@ -47,12 +48,12 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <div>
-    <ListSubheader inset>Saved reports</ListSubheader>
-    <ListItem button>
+    <ListSubheader inset>Settings</ListSubheader>
+    <ListItem button to={'/admin/settings'} component={Link}>
       <ListItemIcon>
-        <AssignmentIcon />
+        <SettingsIcon />
       </ListItemIcon>
-      <ListItemText primary='Current month' />
+      <ListItemText primary='Global Settings' />
     </ListItem>
     <ListItem button>
       <ListItemIcon>

@@ -35,3 +35,7 @@ export const EDIT_FAIL = 'EDIT_FAIL';
 export const DELETE_FAIL = 'DELETE_FAIL';
 export const DELETE_SUCCESS = 'DELETE_SUCCESS';
 export const SET_LOADING = 'SET_LOADING';
+
+export const GET_SETTINGS = 'GET_SETTINGS';
+export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
+export const SETTINGS_ERROR = 'SETTINGS_ERROR';

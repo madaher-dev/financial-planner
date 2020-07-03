@@ -103,7 +103,7 @@ const PlannerForm = ({
       clearForm();
     }
     clearErrors();
-  }, [error, add]);
+  }, [error, add, setAlert, clearErrors]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
