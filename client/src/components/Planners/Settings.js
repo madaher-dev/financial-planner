@@ -20,6 +20,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
   bullet: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 18,
     paddingBottom: 40,
+    minHeight: 100,
   },
   title2: {
     fontSize: 18,
@@ -46,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
   mainTitle: {
     fontSize: 24,
     paddingBottom: 10,
+    minHeight: 80,
   },
   date: {
     width: '100%',
@@ -57,6 +60,11 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     padding: 10,
+  },
+  card2: {
+    padding: 10,
+    marginRight: 15,
+    marginTop: 10,
   },
   buttonsCol: {
     padding: 10,
@@ -70,6 +78,9 @@ const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
+  },
+  grids: {
+    backgroundColor: 'red',
   },
 }));
 
@@ -199,11 +210,11 @@ const Settings = ({
 
   return (
     <Grid container>
-      <Grid item container direction='column'>
-        <Grid item xs={false} sm={2} />
+      <Grid item container>
+        <Grid item xs={false} sm={1} />
 
-        <Grid item xs={12} sm={8} container spacing={2}>
-          <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={10} container spacing={2}>
+          <Grid item xs={12} md={4}>
             <Card className={classes.card}>
               <CardContent>
                 <Typography
@@ -317,45 +328,197 @@ const Settings = ({
               </CardActions>
             </Card>
           </Grid>
-          <Grid item xs={12} sm={4}>
-            <Card>
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color='textSecondary'
-                  gutterBottom
-                >
-                  Age at death:
-                </Typography>
-                <Slider
-                  id='ageAtDeath'
-                  name='ageAtDeath'
-                  value={ageAtDeath}
-                  onChange={onChange}
-                  step={5}
-                  marks
-                  min={60}
-                  max={100}
-                  valueLabelDisplay='on'
-                />
-              </CardContent>
-              <CardActions>
-                <Button
-                  size='small'
-                  onClick={() =>
-                    handleClickLearn(
-                      'Age at Death',
-                      'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
-                    )
-                  }
-                >
-                  Learn More
-                </Button>
-              </CardActions>
-            </Card>
+          <Grid item container xs={12} md={8}>
+            <Grid item container xs={12} spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <Typography
+                      className={classes.mainTitle}
+                      color='textPrimary'
+                      gutterBottom
+                    >
+                      Model Portfolio Allocations:
+                    </Typography>
+
+                    <Typography
+                      className={classes.title}
+                      color='textSecondary'
+                      gutterBottom
+                    >
+                      Cash Short Term Deposits:
+                    </Typography>
+
+                    <Slider
+                      id='mpaCashSTD'
+                      name='mpaCashSTD'
+                      value={mpaCashSTD}
+                      onChange={onChange}
+                      step={5}
+                      marks
+                      min={60}
+                      max={100}
+                      valueLabelDisplay='on'
+                    />
+                    <Tooltip
+                      title='Fixed Income Securities'
+                      placement='top-start'
+                    >
+                      <Typography
+                        className={classes.title}
+                        color='textSecondary'
+                        gutterBottom
+                      >
+                        Long Term Deposits:
+                      </Typography>
+                    </Tooltip>
+                    <Slider
+                      id='mpaLTD'
+                      name='mpaLTD'
+                      value={mpaLTD}
+                      onChange={onChange}
+                      min={0}
+                      max={50}
+                      valueLabelDisplay='on'
+                    />
+                    <Typography
+                      className={classes.title}
+                      color='textSecondary'
+                      gutterBottom
+                    >
+                      Equities:
+                    </Typography>
+                    <Slider
+                      id='mpaEquities'
+                      name='mpaEquities'
+                      value={mpaEquities}
+                      onChange={onChange}
+                      min={0}
+                      max={50}
+                      valueLabelDisplay='on'
+                    />
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size='small'
+                      onClick={() =>
+                        handleClickLearn(
+                          'Model Portfolio Allocations',
+                          'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
+                        )
+                      }
+                    >
+                      Learn More
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <Typography
+                      className={classes.mainTitle}
+                      color='textPrimary'
+                      gutterBottom
+                    >
+                      Capital Market Expectations:
+                    </Typography>
+
+                    <Typography
+                      className={classes.title}
+                      color='textSecondary'
+                      gutterBottom
+                    >
+                      Cash Short Term Deposits:
+                    </Typography>
+
+                    <Slider
+                      id='cmeCashSTD'
+                      name='cmeCashSTD'
+                      value={cmeCashSTD}
+                      onChange={onChange}
+                      step={5}
+                      marks
+                      min={60}
+                      max={100}
+                      valueLabelDisplay='on'
+                    />
+                    <Tooltip
+                      title='Fixed Income Securities'
+                      placement='top-start'
+                    >
+                      <Typography
+                        className={classes.title}
+                        color='textSecondary'
+                        gutterBottom
+                      >
+                        Long Term Deposits:
+                      </Typography>
+                    </Tooltip>
+                    <Slider
+                      id='cmeLTD'
+                      name='cmeLTD'
+                      value={cmeLTD}
+                      onChange={onChange}
+                      min={0}
+                      max={50}
+                      valueLabelDisplay='on'
+                    />
+                    <Typography
+                      className={classes.title}
+                      color='textSecondary'
+                      gutterBottom
+                    >
+                      Equities:
+                    </Typography>
+                    <Slider
+                      id='cmeEquities'
+                      name='cmeEquities'
+                      value={cmeEquities}
+                      onChange={onChange}
+                      min={0}
+                      max={50}
+                      valueLabelDisplay='on'
+                    />
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size='small'
+                      onClick={() =>
+                        handleClickLearn(
+                          'Model Portfolio Allocations',
+                          'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
+                        )
+                      }
+                    >
+                      Learn More
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Card className={classes.card2}>
+                <CardContent>
+                  <Typography className={classes.title} color='textSecondary'>
+                    Expected Return:
+                  </Typography>
+
+                  <Slider
+                    id='expectedReturn'
+                    name='expectedReturn'
+                    value={expectedReturn}
+                    onChange={onChange}
+                    min={0}
+                    max={50}
+                    valueLabelDisplay='on'
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={false} sm={2} />
+        <Grid item xs={false} sm={1} />
         <LearnMore
           title={title}
           open={open}
