@@ -21,6 +21,7 @@ import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme) => ({
   bullet: {
@@ -61,16 +62,14 @@ const useStyles = makeStyles((theme) => ({
   card: {
     padding: 10,
   },
-  card2: {
-    padding: 10,
-    marginRight: 15,
-    marginTop: 10,
-  },
+
   buttonsCol: {
     padding: 10,
     marginBottom: 80,
     justifyContent: 'center',
     alignItems: 'center',
+
+    marginRight: 40,
   },
   buttons: {
     margin: 20,
@@ -175,11 +174,14 @@ const Settings = ({
     goalThree,
   } = current;
 
-  const onChange = (event, newValue) => {
+  const onChange = (name) => (e, value) => {
     setCurrent({
       ...current,
-      [event.target.id]: newValue,
+      [name]: value,
     });
+  };
+  const onChangeField = (e) => {
+    setCurrent({ ...current, [e.target.id]: e.target.value });
   };
 
   const [learn, setLearn] = useState({
@@ -214,119 +216,122 @@ const Settings = ({
         <Grid item xs={false} sm={1} />
 
         <Grid item xs={12} sm={10} container spacing={2}>
-          <Grid item xs={12} md={4}>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography
-                  className={classes.mainTitle}
-                  color='textPrimary'
-                  gutterBottom
-                >
-                  General Settings:
-                </Typography>
+          <Grid item container spacing={2} xs={12} md={4}>
+            <Grid item xs={12}>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography
+                    className={classes.mainTitle}
+                    color='textPrimary'
+                    gutterBottom
+                  >
+                    General Settings:
+                  </Typography>
 
-                <Typography
-                  className={classes.title}
-                  color='textSecondary'
-                  gutterBottom
-                >
-                  Age at death:
-                </Typography>
+                  <Typography
+                    className={classes.title}
+                    color='textSecondary'
+                    gutterBottom
+                  >
+                    Age at death:
+                  </Typography>
 
-                <Slider
-                  id='ageAtDeath'
-                  name='ageAtDeath'
-                  value={ageAtDeath}
-                  onChange={onChange}
-                  step={5}
-                  marks
-                  min={60}
-                  max={100}
-                  valueLabelDisplay='on'
-                />
-                <Typography
-                  className={classes.title}
-                  color='textSecondary'
-                  gutterBottom
-                >
-                  Inflation of Costs:
-                </Typography>
-                <Slider
-                  id='costInflation'
-                  name='costInflation'
-                  value={costInflation}
-                  onChange={onChange}
-                  min={0}
-                  max={50}
-                  valueLabelDisplay='on'
-                />
-                <Typography
-                  className={classes.title}
-                  color='textSecondary'
-                  gutterBottom
-                >
-                  Education Inflation:
-                </Typography>
-                <Slider
-                  id='eduInflation'
-                  name='eduInflation'
-                  value={eduInflation}
-                  onChange={onChange}
-                  min={0}
-                  max={50}
-                  valueLabelDisplay='on'
-                />
-                <Typography
-                  className={classes.title}
-                  color='textSecondary'
-                  gutterBottom
-                >
-                  Time Horizon:
-                </Typography>
-                <Slider
-                  id='timeHorizon'
-                  name='timeHorizon'
-                  value={timeHorizon}
-                  onChange={onChange}
-                  min={0}
-                  max={50}
-                  valueLabelDisplay='on'
-                />
-                <Typography
-                  className={classes.title2}
-                  color='textSecondary'
-                  gutterBottom
-                >
-                  Model Year End:
-                </Typography>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DatePicker
-                    className={classes.date}
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    views={['year']}
-                    autoOk
-                    minDate='01.01.2050'
-                    InputProps={{
-                      className: classes.input,
-                    }}
+                  <Slider
+                    id='ageAtDeath'
+                    name='ageAtDeath'
+                    value={ageAtDeath}
+                    onChange={onChange('ageAtDeath')}
+                    step={5}
+                    marks
+                    min={60}
+                    max={100}
+                    valueLabelDisplay='on'
                   />
-                </MuiPickersUtilsProvider>
-              </CardContent>
-              <CardActions>
-                <Button
-                  size='small'
-                  onClick={() =>
-                    handleClickLearn(
-                      'Age at Death',
-                      'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
-                    )
-                  }
-                >
-                  Learn More
-                </Button>
-              </CardActions>
-            </Card>
+                  <Typography
+                    className={classes.title}
+                    color='textSecondary'
+                    gutterBottom
+                  >
+                    Inflation of Costs:
+                  </Typography>
+                  <Slider
+                    id='costInflation'
+                    name='costInflation'
+                    value={costInflation}
+                    onChange={onChange('costInflation')}
+                    min={0}
+                    max={50}
+                    valueLabelDisplay='on'
+                  />
+                  <Typography
+                    className={classes.title}
+                    color='textSecondary'
+                    gutterBottom
+                  >
+                    Education Inflation:
+                  </Typography>
+                  <Slider
+                    id='eduInflation'
+                    name='eduInflation'
+                    type='number'
+                    value={eduInflation}
+                    onChange={onChange('eduInflation')}
+                    min={0}
+                    max={50}
+                    valueLabelDisplay='on'
+                  />
+                  <Typography
+                    className={classes.title}
+                    color='textSecondary'
+                    gutterBottom
+                  >
+                    Time Horizon:
+                  </Typography>
+                  <Slider
+                    id='timeHorizon'
+                    name='timeHorizon'
+                    value={timeHorizon}
+                    onChange={onChange('timeHorizon')}
+                    min={0}
+                    max={50}
+                    valueLabelDisplay='on'
+                  />
+                  <Typography
+                    className={classes.title2}
+                    color='textSecondary'
+                    gutterBottom
+                  >
+                    Model Year End:
+                  </Typography>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DatePicker
+                      className={classes.date}
+                      value={selectedDate}
+                      onChange={handleDateChange}
+                      views={['year']}
+                      autoOk
+                      minDate='01.01.2050'
+                      InputProps={{
+                        className: classes.input,
+                      }}
+                    />
+                  </MuiPickersUtilsProvider>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    size='small'
+                    onClick={() =>
+                      handleClickLearn(
+                        'Age at Death',
+                        'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
+                      )
+                    }
+                  >
+                    Learn More
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
           </Grid>
           <Grid item container xs={12} md={8}>
             <Grid item container xs={12} spacing={2}>
@@ -353,7 +358,7 @@ const Settings = ({
                       id='mpaCashSTD'
                       name='mpaCashSTD'
                       value={mpaCashSTD}
-                      onChange={onChange}
+                      onChange={onChange('mpaCashSTD')}
                       step={5}
                       marks
                       min={60}
@@ -376,7 +381,7 @@ const Settings = ({
                       id='mpaLTD'
                       name='mpaLTD'
                       value={mpaLTD}
-                      onChange={onChange}
+                      onChange={onChange('mpaLTD')}
                       min={0}
                       max={50}
                       valueLabelDisplay='on'
@@ -392,7 +397,7 @@ const Settings = ({
                       id='mpaEquities'
                       name='mpaEquities'
                       value={mpaEquities}
-                      onChange={onChange}
+                      onChange={onChange('mpaEquities')}
                       min={0}
                       max={50}
                       valueLabelDisplay='on'
@@ -436,7 +441,7 @@ const Settings = ({
                       id='cmeCashSTD'
                       name='cmeCashSTD'
                       value={cmeCashSTD}
-                      onChange={onChange}
+                      onChange={onChange('cmeCashSTD')}
                       step={5}
                       marks
                       min={60}
@@ -459,7 +464,7 @@ const Settings = ({
                       id='cmeLTD'
                       name='cmeLTD'
                       value={cmeLTD}
-                      onChange={onChange}
+                      onChange={onChange('cmeLTD')}
                       min={0}
                       max={50}
                       valueLabelDisplay='on'
@@ -475,7 +480,7 @@ const Settings = ({
                       id='cmeEquities'
                       name='cmeEquities'
                       value={cmeEquities}
-                      onChange={onChange}
+                      onChange={onChange('cmeEquities')}
                       min={0}
                       max={50}
                       valueLabelDisplay='on'
@@ -497,58 +502,178 @@ const Settings = ({
                 </Card>
               </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Card className={classes.card2}>
+            <Grid container item xs={12} spacing={2}>
+              <Grid item xs={12}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <Typography className={classes.title} color='textSecondary'>
+                      Expected Return:
+                    </Typography>
+
+                    <Slider
+                      id='expectedReturn'
+                      name='expectedReturn'
+                      value={expectedReturn}
+                      onChange={onChange('expectedReturn')}
+                      min={0}
+                      max={50}
+                      valueLabelDisplay='on'
+                    />
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item container xs={12} spacing={4}>
+            <Grid item xs={12} sm={6}>
+              <Card className={classes.card}>
                 <CardContent>
-                  <Typography className={classes.title} color='textSecondary'>
-                    Expected Return:
+                  <Typography
+                    className={classes.mainTitle}
+                    color='textPrimary'
+                    gutterBottom
+                  >
+                    Children:
                   </Typography>
 
-                  <Slider
-                    id='expectedReturn'
-                    name='expectedReturn'
-                    value={expectedReturn}
-                    onChange={onChange}
-                    min={0}
-                    max={50}
-                    valueLabelDisplay='on'
+                  <TextField
+                    margin='dense'
+                    id='childrenAgeStart'
+                    name='childrenAgeStart'
+                    label='Age of Start Schooling'
+                    type='number'
+                    value={childrenAgeStart}
+                    onChange={onChangeField}
+                    inputProps={{ min: 0, max: 10 }}
+                    fullWidth
+                  />
+
+                  <TextField
+                    margin='dense'
+                    id='childrenNumYearsSchool'
+                    name='childrenNumYearsSchool'
+                    label='Number of years at school'
+                    value={childrenNumYearsSchool}
+                    type='number'
+                    inputProps={{ min: 0, max: 20 }}
+                    onChange={onChangeField}
+                    fullWidth
+                  />
+                  <TextField
+                    margin='dense'
+                    id='childrenSchoolEnd'
+                    name='childrenSchoolEnd'
+                    label='End of School Age '
+                    value={childrenSchoolEnd}
+                    type='number'
+                    inputProps={{ min: 0, max: 20 }}
+                    onChange={onChangeField}
+                    fullWidth
+                  />
+                  <TextField
+                    margin='dense'
+                    id='childrenNumYearsUni'
+                    name='childrenNumYearsUni'
+                    label='Number of years at University'
+                    value={childrenNumYearsUni}
+                    type='number'
+                    inputProps={{ min: 0, max: 20 }}
+                    onChange={onChangeField}
+                    fullWidth
+                  />
+                  <TextField
+                    margin='dense'
+                    id='childrenUniEnd'
+                    name='childrenUniEnd'
+                    label='End of University Age'
+                    value={childrenUniEnd}
+                    type='number'
+                    inputProps={{ min: 0, max: 20 }}
+                    onChange={onChangeField}
+                    fullWidth
                   />
                 </CardContent>
+                <CardActions>
+                  <Button
+                    size='small'
+                    onClick={() =>
+                      handleClickLearn(
+                        'Children',
+                        'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
+                      )
+                    }
+                  >
+                    Learn More
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography
+                    className={classes.mainTitle}
+                    color='textPrimary'
+                    gutterBottom
+                  >
+                    Goals:
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    size='small'
+                    onClick={() =>
+                      handleClickLearn(
+                        'Age at Death',
+                        'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
+                      )
+                    }
+                  >
+                    Learn More
+                  </Button>
+                </CardActions>
               </Card>
             </Grid>
           </Grid>
+          <Grid
+            item
+            container
+            direction='column'
+            xs={12}
+            className={classes.buttonsCol}
+          >
+            <div>
+              <Button
+                variant='contained'
+                color='secondary'
+                onClick={onReset}
+                className={classes.buttons}
+              >
+                Reset
+              </Button>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={onSubmit}
+                className={classes.buttons}
+              >
+                Save
+              </Button>
+            </div>
+          </Grid>
         </Grid>
         <Grid item xs={false} sm={1} />
-        <LearnMore
-          title={title}
-          open={open}
-          desc={desc}
-          handleClose={() => handleLearnClose()}
-        />
       </Grid>
-      <Grid item container direction='column' className={classes.buttonsCol}>
-        <div>
-          <Button
-            variant='contained'
-            color='secondary'
-            onClick={onReset}
-            className={classes.buttons}
-          >
-            Reset
-          </Button>
-          <Button
-            variant='contained'
-            color='primary'
-            onClick={onSubmit}
-            className={classes.buttons}
-          >
-            Save
-          </Button>
-        </div>
-      </Grid>
+
       <Backdrop className={classes.backdrop} open={loading}>
         <CircularProgress color='inherit' />
       </Backdrop>
+      <LearnMore
+        title={title}
+        open={open}
+        desc={desc}
+        handleClose={() => handleLearnClose()}
+      />
     </Grid>
   );
 };
