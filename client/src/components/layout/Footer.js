@@ -28,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     top: 'auto',
     bottom: 0,
+    position: 'fixed',
+    zIndex: theme.zIndex.drawer + 1,
 
     //paddingTop: theme.spacing(10),
     // marginTop: theme.spacing(10),

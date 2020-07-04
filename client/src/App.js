@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
+  footer: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
 }));
 
 const App = () => {
@@ -74,7 +77,7 @@ const App = () => {
               <Route exact path='/register' component={Register} />
               <Route exact path='/login' component={Login} />
             </Switch>
-            <Footer />
+            <Footer className={classes.footer} />
           </Fragment>
         </Router>
       </Provider>

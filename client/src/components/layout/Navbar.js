@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 //import { logout, openDrawer } from '../../actions/userActions';
@@ -88,6 +88,34 @@ const Navbar = ({
     logout();
     clearContacts();
   };
+  function useWindowSize() {
+    const isClient = typeof window === 'object';
+
+    function getSize() {
+      return {
+        width: isClient ? window.innerWidth : undefined,
+        height: isClient ? window.innerHeight : undefined,
+      };
+    }
+
+    const [windowSize, setWindowSize] = useState(getSize);
+
+    useEffect(() => {
+      if (!isClient) {
+        return false;
+      }
+
+      function handleResize() {
+        setWindowSize(getSize());
+      }
+
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []); // Empty array ensures that effect is only run on mount and unmount
+
+    return windowSize;
+  }
+  const size = useWindowSize();
 
   const authLinks = (
     <Grid container>
@@ -122,7 +150,15 @@ const Navbar = ({
         </Toolbar>
       </Grid>
       <Grid item className={classes.authMenu}>
-        {isAdmin ? <TopMenuAdmin /> : <TopMenuAuth />}
+        {size.width > 600 ? (
+          isAdmin ? (
+            <TopMenuAdmin />
+          ) : (
+            <TopMenuAuth />
+          )
+        ) : (
+          <Fragment></Fragment>
+        )}
       </Grid>
       <Grid item></Grid>
       <Grid item className={classes.notifications}>
