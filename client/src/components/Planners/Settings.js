@@ -22,6 +22,10 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 const useStyles = makeStyles((theme) => ({
   bullet: {
@@ -80,6 +84,13 @@ const useStyles = makeStyles((theme) => ({
   },
   grids: {
     backgroundColor: 'red',
+  },
+
+  goals: {
+    paddingBottom: 125,
+  },
+  goalsField: {
+    paddingBottom: 10,
   },
 }));
 
@@ -182,6 +193,20 @@ const Settings = ({
   };
   const onChangeField = (e) => {
     setCurrent({ ...current, [e.target.id]: e.target.value });
+  };
+
+  const onChangeGoals = (e) => {
+    const keyChanged = e.target.name;
+
+    const keyWhoseValueIsRepeated = Object.keys(current).find(
+      (key) => current[key] === e.target.value
+    );
+
+    let newValues = { ...current, [keyChanged]: e.target.value };
+    if (keyWhoseValueIsRepeated) {
+      newValues[keyWhoseValueIsRepeated] = current[keyChanged];
+    }
+    setCurrent(newValues);
   };
 
   const [learn, setLearn] = useState({
@@ -610,7 +635,7 @@ const Settings = ({
             </Grid>
             <Grid item xs={12} sm={6}>
               <Card className={classes.card}>
-                <CardContent>
+                <CardContent className={classes.goals}>
                   <Typography
                     className={classes.mainTitle}
                     color='textPrimary'
@@ -618,13 +643,75 @@ const Settings = ({
                   >
                     Goals:
                   </Typography>
+                  <FormControl fullWidth className={classes.goalsField}>
+                    <InputLabel id='goalOne-label'>Primary Goal</InputLabel>
+                    <Select
+                      labelId='goalOne'
+                      name='goalOne'
+                      id='goalOne'
+                      value={goalOne}
+                      onChange={onChangeGoals}
+                    >
+                      <MenuItem id='goalOne' value={'Retirement'}>
+                        Retirement
+                      </MenuItem>
+                      <MenuItem id='goalOne' value={'Education'}>
+                        Children Education
+                      </MenuItem>
+                      <MenuItem id='goalOne' value={'Vacation'}>
+                        Vacation
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth className={classes.goalsField}>
+                    <InputLabel id='goalTwo-label'>Secondary Goal</InputLabel>
+                    <Select
+                      labelId='goalTwo'
+                      name='goalTwo'
+                      id='goalTwo'
+                      value={goalTwo}
+                      onChange={onChangeGoals}
+                    >
+                      <MenuItem id='goalTwo' value={'Retirement'}>
+                        Retirement
+                      </MenuItem>
+                      <MenuItem id='goalTwo' value={'Education'}>
+                        Children Education
+                      </MenuItem>
+                      <MenuItem id='goalTwo' value={'Vacation'}>
+                        Vacation
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth className={classes.goalsField}>
+                    <InputLabel id='goalThree-label' gutterBottom>
+                      Teritary Goal
+                    </InputLabel>
+                    <Select
+                      labelId='goalThree'
+                      name='goalThree'
+                      id='goalThree'
+                      value={goalThree}
+                      onChange={onChangeGoals}
+                    >
+                      <MenuItem id='goalThree' value={'Retirement'}>
+                        Retirement
+                      </MenuItem>
+                      <MenuItem id='goalThree' value={'Education'}>
+                        Children Education
+                      </MenuItem>
+                      <MenuItem id='goalThree' value={'Vacation'}>
+                        Vacation
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
                 </CardContent>
                 <CardActions>
                   <Button
                     size='small'
                     onClick={() =>
                       handleClickLearn(
-                        'Age at Death',
+                        'Goals',
                         'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
                       )
                     }
