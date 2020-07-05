@@ -88,6 +88,7 @@ const AuthDrawer = ({ closeDrawer, open, isAuthenticated, isAdmin }) => {
 
       window.addEventListener('resize', handleResize);
       return () => window.removeEventListener('resize', handleResize);
+      // eslint-disable-next-line
     }, []); // Empty array ensures that effect is only run on mount and unmount
 
     return windowSize;
@@ -97,7 +98,7 @@ const AuthDrawer = ({ closeDrawer, open, isAuthenticated, isAdmin }) => {
     if (size.width < 600) {
       closeDrawer();
     }
-  }, [size.width]);
+  }, [size.width, closeDrawer]);
 
   const classes = useStyles();
   const guestDrawer = <Fragment></Fragment>;

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 //import { getPlanners } from '../../actions/userActions';
 import { getPlanners, openDrawer } from '../../actions/plannerActions';
+import Users from '../Users/Users';
 import Planners from '../Planners/Planners';
 import { Route, Switch } from 'react-router-dom';
 import AuthDrawer from '../material/AuthDrawer';
@@ -47,6 +48,7 @@ const Admin = ({ getPlanners, match, openDrawer }) => {
         <Container maxWidth='lg' className={classes.container}>
           <Switch>
             <Route exact path={`${match.path}/planners`} component={Planners} />
+            <Route exact path={`${match.path}/users`} component={Users} />
             <Route exact path={`${match.path}/settings`} component={Settings} />
             <Route exact path={`${match.path}/`} component={AdminWelcome} />
           </Switch>

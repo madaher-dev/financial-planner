@@ -7,11 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  editPlanner,
-  clearErrors,
-  setLoading,
-} from '../../actions/plannerActions';
+import { editUser, clearErrors, setLoading } from '../../actions/userActions';
 import { setAlert } from '../../actions/alertActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,8 +15,6 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -55,14 +49,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const EditForm = ({
-  editPlanner,
+  editUser,
   error,
   clearErrors,
   setAlert,
   open,
   handleClose,
   edit,
-  planner,
+  user,
   deleted,
   setLoading,
   editLoading,
@@ -70,53 +64,43 @@ const EditForm = ({
   const classes = useStyles();
   //Setting form data on form open
   React.useEffect(() => {
-    setAdmin(false);
-    if (planner) {
-      if (planner.type === 'Admin') {
-        setAdmin(true);
-      }
-
-      setPlanner({
-        name: planner.name,
-        email: planner.email,
-        title: planner.title,
-        company: planner.company,
-        phone: planner.phone,
-        comments: planner.comments,
-        id: planner._id,
-        type: planner.type,
+    if (user) {
+      setUser({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        title: user.title,
+        occupation: user.company,
+        phone: user.phone,
+        comments: user.comments,
+        id: user._id,
       });
     }
+  }, [user]);
 
-    // eslint-disable-next-line
-  }, [planner]);
-
-  const [plannerData, setPlanner] = useState({
-    name: '',
+  const [userData, setUser] = useState({
+    firstName: '',
+    lastName: '',
     email: '',
     title: '10',
-    company: '',
+    occupation: '',
     phone: '',
     comments: '',
     id: '',
-    type: '',
   });
 
-  const [admin, setAdmin] = useState(false);
-
-  const { title, name, email, company, phone, comments } = plannerData;
+  const {
+    title,
+    firstName,
+    lastName,
+    email,
+    occupation,
+    phone,
+    comments,
+  } = userData;
 
   const onChange = (e) => {
-    setPlanner({ ...plannerData, [e.target.name]: e.target.value });
-  };
-  const onAdminChange = (e) => {
-    if (e.target.checked) {
-      setPlanner({ ...plannerData, type: 'Admin' });
-      setAdmin(true);
-    } else {
-      setPlanner({ ...plannerData, type: 'Planner' });
-      setAdmin(false);
-    }
+    setUser({ ...userData, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
@@ -126,10 +110,10 @@ const EditForm = ({
         clearErrors();
       }
     } else if (edit) {
-      setAlert('Planner successfully edited', 'success');
+      setAlert('User successfully edited', 'success');
       clearErrors();
     } else if (deleted) {
-      setAlert('Planner Deleted', 'warning');
+      setAlert('User Deleted', 'warning');
       clearErrors();
     }
   }, [error, edit, setAlert, clearErrors, deleted]);
@@ -137,7 +121,7 @@ const EditForm = ({
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading();
-    editPlanner(plannerData);
+    editUser(userData);
   };
 
   return (
@@ -146,9 +130,9 @@ const EditForm = ({
       onClose={handleClose}
       aria-labelledby='form-dialog-title'
     >
-      <DialogTitle id='form-dialog-title'>Edit Planner</DialogTitle>
+      <DialogTitle id='form-dialog-title'>Edit User</DialogTitle>
       <DialogContent>
-        <DialogContentText>Edit Planner Data</DialogContentText>
+        <DialogContentText>Edit User Data</DialogContentText>
         <FormControl className={classes.formControl}>
           <InputLabel id='title-label'>Title</InputLabel>
           <Select
@@ -169,26 +153,36 @@ const EditForm = ({
 
         <TextField
           margin='dense'
-          id='name'
-          name='name'
-          label='Name'
+          id='firstName'
+          name='firstName'
+          label='First Name'
           type='text'
-          value={name}
+          value={firstName}
           onChange={onChange}
           fullWidth
-          autoComplete='name'
+          autoComplete='first name'
+        />
+        <TextField
+          margin='dense'
+          id='lastName'
+          name='lastName'
+          label='Last Name'
+          type='text'
+          value={lastName}
+          onChange={onChange}
+          fullWidth
+          autoComplete='last name'
         />
 
         <TextField
           margin='dense'
-          id='company'
-          name='company'
-          label='Company'
+          id='occupation'
+          name='occupation'
+          label='Occupation'
           type='text'
-          value={company}
+          value={occupation}
           onChange={onChange}
           fullWidth
-          autoComplete='company'
         />
         <TextField
           margin='dense'
@@ -223,20 +217,13 @@ const EditForm = ({
           onChange={onChange}
           fullWidth
         />
-
-        <FormControlLabel
-          control={
-            <Switch checked={admin} onChange={onAdminChange} name='admin' />
-          }
-          label='Is Admin'
-        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color='primary'>
           Close
         </Button>
         <Button onClick={onSubmit} color='primary'>
-          Edit Planner
+          Edit User
         </Button>
       </DialogActions>
       <Backdrop className={classes.backdrop} open={editLoading}>
@@ -247,7 +234,7 @@ const EditForm = ({
 };
 
 EditForm.propTypes = {
-  editPlanner: PropTypes.func.isRequired,
+  editUser: PropTypes.func.isRequired,
   error: PropTypes.object,
   setAlert: PropTypes.func.isRequired,
   clearErrors: PropTypes.func.isRequired,
@@ -260,15 +247,14 @@ EditForm.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.planners.isAuthenticated,
-  error: state.planners.error,
-  edit: state.planners.edit,
-  deleted: state.planners.delete,
-  editLoading: state.planners.formLoading,
+  error: state.users.error,
+  edit: state.users.edit,
+  deleted: state.users.delete,
+  editLoading: state.users.formLoading,
 });
 
 export default connect(mapStateToProps, {
-  editPlanner,
+  editUser,
   clearErrors,
   setAlert,
   setLoading,

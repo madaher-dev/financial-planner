@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const auth = require('../middleware/auth');
 const Planner = require('../modules/Planner');
+const User = require('../modules/User');
 const nodemailer = require('nodemailer');
 var crypto = require('crypto');
 
@@ -224,6 +225,66 @@ router.put('/sendMail', async (req, res) => {
   }
 });
 
+// @route   Post api/users/userSendMail
+// @desc    Send Reset New User Email
+// @access  Public
+
+router.put('/userSendMail', async (req, res) => {
+  const { email } = req.body;
+  try {
+    let user = await User.findOne({ email });
+
+    var email_token = crypto.randomBytes(64).toString('hex');
+
+    const payload = {
+      resetPasswordToken: email_token,
+    };
+
+    const addToken = await User.findByIdAndUpdate(
+      user.id,
+      { $set: payload },
+      { new: true }
+    );
+
+    const transporter = nodemailer.createTransport({
+      host: 'mail.butula.net',
+      port: 587,
+      secure: false, // upgrade later with STARTTLS
+      auth: {
+        user: config.get('EMAIL_ADDRESS'),
+        pass: config.get('EMAIL_PASSWORD'),
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    const mailOptions = {
+      from: 'info@butula.net',
+      to: `${user.email}`,
+      subject: 'Pringles: User Account Created',
+      text:
+        'You are receiving this because we have created a new Account for you on Pringles Financial Planner\n\n' +
+        'Please click on the following link, or paste this into your browser to reset your password and complete the process :\n\n' +
+        `http://localhost:3000/newuser/${email_token}\n\n` +
+        'If you did not request this, please ignore this email.\n',
+    };
+
+    console.log('sending mail');
+
+    transporter.sendMail(mailOptions, (err, response) => {
+      if (err) {
+        console.error('there was an error: ', err);
+      } else {
+        console.log('here is the res: ', response);
+        return res.status(200).json('new User account email sent');
+      }
+    });
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ errors: [{ msg: 'Server Error' }] });
+  }
+});
 // @route   Post api/auth/reset
 // @desc    Check if email token valid and return username
 // @access  Public

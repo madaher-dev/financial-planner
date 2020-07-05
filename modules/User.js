@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const UserSchema = mongoose.Schema({
-  name: {
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
     type: String,
     required: true,
   },
@@ -18,15 +22,31 @@ const UserSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  type: {
-    type: String,
-    default: 'Planner',
-  },
+
   resetPasswordToken: {
     type: String,
   },
   resetPasswordExpires: {
     type: Date,
+  },
+  title: {
+    type: String,
+  },
+  occupation: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  comments: {
+    type: String,
+  },
+  partner: {
+    type: Boolean,
+  },
+  planner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'planners',
   },
 });
 

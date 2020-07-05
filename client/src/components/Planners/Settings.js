@@ -613,7 +613,7 @@ const Settings = ({
                     label='End of University Age'
                     value={childrenUniEnd}
                     type='number'
-                    inputProps={{ min: 0, max: 20 }}
+                    inputProps={{ min: 16, max: 40 }}
                     onChange={onChangeField}
                     fullWidth
                   />
@@ -684,9 +684,7 @@ const Settings = ({
                     </Select>
                   </FormControl>
                   <FormControl fullWidth className={classes.goalsField}>
-                    <InputLabel id='goalThree-label' gutterBottom>
-                      Teritary Goal
-                    </InputLabel>
+                    <InputLabel id='goalThree-label'>Teritary Goal</InputLabel>
                     <Select
                       labelId='goalThree'
                       name='goalThree'
