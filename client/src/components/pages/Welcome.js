@@ -37,7 +37,7 @@ const Welcome = ({
   if (isAdmin) {
     return <Redirect to='/admin' />;
   } else if (isAuthenticated) {
-    return <Redirect to='/contacts' />;
+    return <Redirect to='/planner' />;
   } else {
     return (
       <main className={classes.content}>

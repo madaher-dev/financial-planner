@@ -1,8 +1,8 @@
 import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-//import { getPlanners } from '../../actions/userActions';
-import { getPlanners, openDrawer } from '../../actions/plannerActions';
+
+import { openDrawer } from '../../actions/plannerActions';
 import Users from '../Users/Users';
 import Planners from '../Planners/Planners';
 import { Route, Switch } from 'react-router-dom';
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Admin = ({ getPlanners, match, openDrawer }) => {
+const Admin = ({ match, openDrawer }) => {
   useEffect(() => {
     openDrawer();
 
@@ -58,8 +58,7 @@ const Admin = ({ getPlanners, match, openDrawer }) => {
   );
 };
 Admin.propTypes = {
-  getPlanners: PropTypes.func.isRequired,
   openDrawer: PropTypes.func.isRequired,
 };
 
-export default connect(null, { getPlanners, openDrawer })(Admin);
+export default connect(null, { openDrawer })(Admin);

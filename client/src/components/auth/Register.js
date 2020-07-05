@@ -72,7 +72,7 @@ const Register = ({
   const classes = useStyles();
 
   if (isAuthenticated) {
-    return <Redirect to='/contacts' />;
+    return <Redirect to='/planner' />;
   } else {
     return (
       <Container maxWidth='lg' className={classes.container}>

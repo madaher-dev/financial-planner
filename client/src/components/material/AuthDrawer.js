@@ -8,7 +8,12 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import { IconButton, Divider, List } from '@material-ui/core';
-import { mainListItems, secondaryListItems } from './listItems';
+import {
+  mainListItems,
+  secondaryListItems,
+  plannerItems,
+  plannerSecondaryItems,
+} from './listItems';
 
 const drawerWidth = 240;
 
@@ -135,7 +140,9 @@ const AuthDrawer = ({ closeDrawer, open, isAuthenticated, isAdmin }) => {
         </IconButton>
       </div>
       <Divider />
-      <List>{mainListItems}</List>
+      <List>{plannerItems}</List>
+      <Divider />
+      <List>{plannerSecondaryItems}</List>
     </Drawer>
   );
 

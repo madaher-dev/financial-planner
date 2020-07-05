@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Settings = ({
+const SettingsRO = ({
   getSettings,
   settings,
   error,
@@ -764,7 +764,7 @@ const Settings = ({
   );
 };
 
-Settings.propTypes = {
+SettingsRO.propTypes = {
   getSettings: PropTypes.func.isRequired,
   settings: PropTypes.object,
   loading: PropTypes.bool.isRequired,
@@ -783,4 +783,4 @@ export default connect(mapStateToProps, {
   getSettings,
   saveSettings,
   setLoading,
-})(Settings);
+})(SettingsRO);

@@ -23,6 +23,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -74,6 +77,7 @@ const UserForm = ({
     occupation: '',
     phone: '',
     comments: '',
+    partner: false,
   });
 
   const {
@@ -90,6 +94,17 @@ const UserForm = ({
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  const [partner, setPartner] = useState(false);
+  const onPartnerChange = (e) => {
+    if (e.target.checked) {
+      setUser({ ...user, partner: true });
+      setPartner(true);
+    } else {
+      setUser({ ...user, partner: false });
+      setPartner(false);
+    }
+  };
+
   const clearForm = () => {
     setUser({
       firstName: '',
@@ -100,6 +115,7 @@ const UserForm = ({
       phone: '',
       comments: '',
     });
+    setPartner(false);
     clearAdd();
   };
 
@@ -217,6 +233,17 @@ const UserForm = ({
           value={comments}
           onChange={onChange}
           fullWidth
+        />
+
+        <FormControlLabel
+          control={
+            <Switch
+              checked={partner}
+              onChange={onPartnerChange}
+              name='partner'
+            />
+          }
+          label='Has partner?'
         />
       </DialogContent>
       <DialogActions>

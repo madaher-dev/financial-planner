@@ -7,8 +7,13 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { editUser, clearErrors, setLoading } from '../../actions/userActions';
-import { setAlert } from '../../actions/alertActions';
+import {
+  addUser,
+  clearErrors,
+  clearAdd,
+  setLoading,
+} from '../../../actions/userActions';
+import { setAlert } from '../../../actions/alertActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Select from '@material-ui/core/Select';
@@ -17,6 +22,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
@@ -50,40 +56,20 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
   },
 }));
-const EditForm = ({
-  editUser,
+const UserForm = ({
+  addUser,
   error,
   clearErrors,
   setAlert,
   open,
   handleClose,
-  edit,
-  user,
-  deleted,
+  add,
+  addLoading,
   setLoading,
-  editLoading,
 }) => {
+  // const [open, setOpen] = React.useState(false);
   const classes = useStyles();
-  //Setting form data on form open
-  React.useEffect(() => {
-    setPartner(false);
-    if (user) {
-      if (user.partner) setPartner(true);
-      setUser({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        title: user.title,
-        occupation: user.occupation,
-        phone: user.phone,
-        comments: user.comments,
-        partner: user.partner,
-        id: user._id,
-      });
-    }
-  }, [user]);
-
-  const [userData, setUser] = useState({
+  const [user, setUser] = useState({
     firstName: '',
     lastName: '',
     email: '',
@@ -91,7 +77,6 @@ const EditForm = ({
     occupation: '',
     phone: '',
     comments: '',
-    id: '',
     partner: false,
   });
 
@@ -103,42 +88,53 @@ const EditForm = ({
     occupation,
     phone,
     comments,
-  } = userData;
+  } = user;
 
   const onChange = (e) => {
-    setUser({ ...userData, [e.target.name]: e.target.value });
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
-  const [partnercheck, setPartner] = useState(false);
+
+  const [partner, setPartner] = useState(false);
   const onPartnerChange = (e) => {
     if (e.target.checked) {
-      setUser({ ...userData, partner: true });
+      setUser({ ...user, partner: true });
       setPartner(true);
     } else {
-      setUser({ ...userData, partner: false });
+      setUser({ ...user, partner: false });
       setPartner(false);
     }
+  };
+
+  const clearForm = () => {
+    setUser({
+      firstName: '',
+      lastName: '',
+      email: '',
+      title: '10',
+      occupation: '',
+      phone: '',
+      comments: '',
+    });
+    setPartner(false);
+    clearAdd();
   };
 
   useEffect(() => {
     if (error) {
       if (error.errors) {
         setAlert(error.errors[0].msg, 'error');
-        clearErrors();
       }
-    } else if (edit) {
-      setAlert('User successfully edited', 'success');
-      clearErrors();
-    } else if (deleted) {
-      setAlert('User Deleted', 'warning');
-      clearErrors();
+    } else if (add) {
+      setAlert('User Added', 'success');
+      clearForm();
     }
-  }, [error, edit, setAlert, clearErrors, deleted]);
+    clearErrors();
+  }, [error, add, setAlert, clearErrors]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading();
-
-    editUser(userData);
+    addUser(user);
   };
 
   return (
@@ -147,9 +143,12 @@ const EditForm = ({
       onClose={handleClose}
       aria-labelledby='form-dialog-title'
     >
-      <DialogTitle id='form-dialog-title'>Edit User</DialogTitle>
+      <DialogTitle id='form-dialog-title'>Add New User</DialogTitle>
       <DialogContent>
-        <DialogContentText>Edit User Data</DialogContentText>
+        <DialogContentText>
+          To add a new User insert their info and they will receive an email to
+          activate their account, set a new password and login.
+        </DialogContentText>
         <FormControl className={classes.formControl}>
           <InputLabel id='title-label'>Title</InputLabel>
           <Select
@@ -200,6 +199,7 @@ const EditForm = ({
           value={occupation}
           onChange={onChange}
           fullWidth
+          autoComplete='occupation'
         />
         <TextField
           margin='dense'
@@ -234,10 +234,11 @@ const EditForm = ({
           onChange={onChange}
           fullWidth
         />
+
         <FormControlLabel
           control={
             <Switch
-              checked={partnercheck}
+              checked={partner}
               onChange={onPartnerChange}
               name='partner'
             />
@@ -247,42 +248,40 @@ const EditForm = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color='primary'>
-          Close
+          Cancel
         </Button>
         <Button onClick={onSubmit} color='primary'>
-          Edit User
+          Add User
         </Button>
       </DialogActions>
-      <Backdrop className={classes.backdrop} open={editLoading}>
+      <Backdrop className={classes.backdrop} open={addLoading}>
         <CircularProgress color='inherit' />
       </Backdrop>
     </Dialog>
   );
 };
 
-EditForm.propTypes = {
-  editUser: PropTypes.func.isRequired,
+UserForm.propTypes = {
+  addUser: PropTypes.func.isRequired,
   error: PropTypes.object,
   setAlert: PropTypes.func.isRequired,
   clearErrors: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  edit: PropTypes.bool.isRequired,
-  deleted: PropTypes.bool.isRequired,
+  add: PropTypes.bool.isRequired,
+  addLoading: PropTypes.bool.isRequired,
   setLoading: PropTypes.func.isRequired,
-  editLoading: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   error: state.users.error,
-  edit: state.users.edit,
-  deleted: state.users.delete,
-  editLoading: state.users.formLoading,
+  add: state.users.add,
+  addLoading: state.users.formLoading,
 });
 
 export default connect(mapStateToProps, {
-  editUser,
+  addUser,
   clearErrors,
   setAlert,
   setLoading,
-})(EditForm);
+})(UserForm);

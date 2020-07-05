@@ -7,8 +7,12 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { editUser, clearErrors, setLoading } from '../../actions/userActions';
-import { setAlert } from '../../actions/alertActions';
+import {
+  editUser,
+  clearErrors,
+  setLoading,
+} from '../../../actions/userActions';
+import { setAlert } from '../../../actions/alertActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Select from '@material-ui/core/Select';

@@ -131,6 +131,8 @@ const Navbar = ({
               classes.menuButton,
               open && classes.menuButtonHidden
             )}
+            to='/'
+            component={Link}
           >
             <MenuIcon />
           </IconButton>

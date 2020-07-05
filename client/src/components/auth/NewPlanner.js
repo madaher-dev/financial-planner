@@ -83,6 +83,7 @@ const ResetPassword = ({ error, setAlert, loadPlanner }) => {
   }, [email_token, setAlert]);
 
   const resetPassword = async (payload) => {
+    payload.email_token = email_token;
     try {
       const resetResponse = await axios.put(
         '../api/auth/updatePasswordViaEmail',
@@ -96,7 +97,7 @@ const ResetPassword = ({ error, setAlert, loadPlanner }) => {
           error2: false,
           token: resetResponse.data.token,
         });
-        console.log(resetResponse.data.token);
+
         setAuthToken(resetResponse.data.token);
         loadPlanner();
       }
@@ -184,7 +185,7 @@ const ResetPassword = ({ error, setAlert, loadPlanner }) => {
     </form>
   );
   if (newPassword.token) {
-    return <Redirect to='/contacts' />;
+    return <Redirect to='/planner' />;
   } else {
     return (
       <Fragment>

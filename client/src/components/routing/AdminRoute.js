@@ -28,7 +28,7 @@ const AdminRoute = ({
         isAuthenticated && isAdmin && !loading ? (
           <Component {...props} />
         ) : !loading ? (
-          <Redirect to='/contacts' />
+          <Redirect to='/planner' />
         ) : (
           <Spinner />
         )

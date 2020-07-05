@@ -1,10 +1,10 @@
 import React from 'react';
 
-const AdminWelcome = (match) => {
+const PlannerWelcome = () => {
   return (
     <div>
-      <h1>Admin</h1>
-      <p className='my-1'>This is the admin page</p>
+      <h1>Planner</h1>
+      <p className='my-1'>This is the Planner page</p>
 
       <p className='bg-dark p'>
         <strong>Version </strong> 1.0.0
@@ -13,4 +13,4 @@ const AdminWelcome = (match) => {
   );
 };
 
-export default AdminWelcome;
+export default PlannerWelcome;

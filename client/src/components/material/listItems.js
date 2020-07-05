@@ -51,3 +51,39 @@ export const secondaryListItems = (
     </ListItem>
   </div>
 );
+
+export const plannerItems = (
+  <div>
+    <ListItem button>
+      <ListItemIcon>
+        <DashboardIcon />
+      </ListItemIcon>
+      <ListItemText primary='Dashboard' />
+    </ListItem>
+
+    <ListItem button to={'/planner/users'} component={Link}>
+      <ListItemIcon>
+        <FaceIcon />
+      </ListItemIcon>
+      <ListItemText primary='Users' />
+    </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <BarChartIcon />
+      </ListItemIcon>
+      <ListItemText primary='Reports' />
+    </ListItem>
+  </div>
+);
+
+export const plannerSecondaryItems = (
+  <div>
+    <ListSubheader inset>Settings</ListSubheader>
+    <ListItem button to={'/planner/settings'} component={Link}>
+      <ListItemIcon>
+        <SettingsIcon />
+      </ListItemIcon>
+      <ListItemText primary='Global Settings' />
+    </ListItem>
+  </div>
+);

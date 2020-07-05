@@ -297,14 +297,13 @@ router.get('/reset', async (req, res) => {
     },
     { email: 1 }
   );
-  //console.log(user);
+
   if (user == null) {
     //console.error('password reset link is invalid or has expired');
     return res
       .status(403)
       .send('password reset link is invalid or has expired');
   } else {
-    //console.log(user);
     return res.status(200).send({
       email: user.email,
       message: 'password reset link a-ok',
@@ -322,12 +321,11 @@ router.get('/resetPlanner', async (req, res) => {
     },
     { email: 1 }
   );
-  //console.log(user);
+
   if (user == null) {
     //console.error('password reset link is invalid or has expired');
     return res.status(403).send('password reset link is invalid ');
   } else {
-    //console.log(user);
     return res.status(200).send({
       email: user.email,
       message: 'password reset link a-ok',

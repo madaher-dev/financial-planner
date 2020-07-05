@@ -193,7 +193,7 @@ const ResetPassword = ({ setAlert, loadPlanner, setLoading, formLoading }) => {
     </form>
   );
   if (newPassword.token) {
-    return <Redirect to='/contacts' />;
+    return <Redirect to='/planner' />;
   } else {
     return (
       <Fragment>

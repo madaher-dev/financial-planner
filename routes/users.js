@@ -171,7 +171,7 @@ router.post(
     if (title) userFields.title = title;
     if (occupation) userFields.occupation = occupation;
     if (comments) userFields.comments = comments;
-    if (partner) userFields.partner = partner;
+    userFields.partner = partner;
 
     try {
       // check if user is an admin (from token)
