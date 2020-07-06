@@ -188,456 +188,466 @@ const SettingsRO = ({
 
   return (
     <Grid container>
-      <Grid item container>
-        <Grid item xs={false} sm={1} />
+      <Grid item xs={12}>
+        <Typography variant='h4' gutterBottom>
+          Global Settings
+        </Typography>
+      </Grid>
+      <Grid container item xs={12}>
+        <Grid item container>
+          <Grid item xs={false} sm={1} />
 
-        <Grid item xs={12} sm={10} container spacing={2}>
-          <Grid item container spacing={2} xs={12} md={4}>
-            <Grid item xs={12}>
-              <Card className={classes.card}>
-                <CardContent>
-                  <Typography
-                    className={classes.mainTitle}
-                    color='textPrimary'
-                    gutterBottom
-                  >
-                    General Settings:
-                  </Typography>
-
-                  <Typography
-                    className={classes.title}
-                    color='textSecondary'
-                    gutterBottom
-                  >
-                    Age at death:
-                  </Typography>
-
-                  <Slider
-                    id='ageAtDeath'
-                    name='ageAtDeath'
-                    value={ageAtDeath}
-                    step={5}
-                    marks
-                    min={60}
-                    max={100}
-                    valueLabelDisplay='on'
-                    color='secondary'
-                  />
-                  <Typography
-                    className={classes.title}
-                    color='textSecondary'
-                    gutterBottom
-                  >
-                    Inflation of Costs:
-                  </Typography>
-                  <Slider
-                    id='costInflation'
-                    name='costInflation'
-                    value={costInflation}
-                    min={0}
-                    max={50}
-                    valueLabelDisplay='on'
-                  />
-                  <Typography
-                    className={classes.title}
-                    color='textSecondary'
-                    gutterBottom
-                  >
-                    Education Inflation:
-                  </Typography>
-                  <Slider
-                    id='eduInflation'
-                    name='eduInflation'
-                    type='number'
-                    value={eduInflation}
-                    min={0}
-                    max={50}
-                    valueLabelDisplay='on'
-                  />
-                  <Typography
-                    className={classes.title}
-                    color='textSecondary'
-                    gutterBottom
-                  >
-                    Time Horizon:
-                  </Typography>
-                  <Slider
-                    id='timeHorizon'
-                    name='timeHorizon'
-                    value={timeHorizon}
-                    min={0}
-                    max={50}
-                    valueLabelDisplay='on'
-                  />
-                  <Typography
-                    className={classes.title2}
-                    color='textSecondary'
-                    gutterBottom
-                  >
-                    Model Year End:
-                  </Typography>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DatePicker
-                      className={classes.date}
-                      value={selectedDate}
-                      views={['year']}
-                      autoOk
-                      minDate='01.01.2050'
-                      InputProps={{
-                        className: classes.input,
-                      }}
-                    />
-                  </MuiPickersUtilsProvider>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size='small'
-                    onClick={() =>
-                      handleClickLearn(
-                        'Age at Death',
-                        'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
-                      )
-                    }
-                  >
-                    Learn More
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          </Grid>
-          <Grid item container xs={12} md={8}>
-            <Grid item container xs={12} spacing={2}>
-              <Grid item xs={12} md={6}>
-                <Card className={classes.card}>
-                  <CardContent>
-                    <Typography
-                      className={classes.mainTitle}
-                      color='textPrimary'
-                      gutterBottom
-                    >
-                      Model Portfolio Allocations:
-                    </Typography>
-
-                    <Typography
-                      className={classes.title}
-                      color='textSecondary'
-                      gutterBottom
-                    >
-                      Cash Short Term Deposits:
-                    </Typography>
-
-                    <Slider
-                      id='mpaCashSTD'
-                      name='mpaCashSTD'
-                      value={mpaCashSTD}
-                      step={5}
-                      marks
-                      min={60}
-                      max={100}
-                      valueLabelDisplay='on'
-                    />
-                    <Tooltip
-                      title='Fixed Income Securities'
-                      placement='top-start'
-                    >
-                      <Typography
-                        className={classes.title}
-                        color='textSecondary'
-                        gutterBottom
-                      >
-                        Long Term Deposits:
-                      </Typography>
-                    </Tooltip>
-                    <Slider
-                      id='mpaLTD'
-                      name='mpaLTD'
-                      value={mpaLTD}
-                      min={0}
-                      max={50}
-                      valueLabelDisplay='on'
-                    />
-                    <Typography
-                      className={classes.title}
-                      color='textSecondary'
-                      gutterBottom
-                    >
-                      Equities:
-                    </Typography>
-                    <Slider
-                      id='mpaEquities'
-                      name='mpaEquities'
-                      value={mpaEquities}
-                      min={0}
-                      max={50}
-                      valueLabelDisplay='on'
-                    />
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size='small'
-                      onClick={() =>
-                        handleClickLearn(
-                          'Model Portfolio Allocations',
-                          'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
-                        )
-                      }
-                    >
-                      Learn More
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Card className={classes.card}>
-                  <CardContent>
-                    <Typography
-                      className={classes.mainTitle}
-                      color='textPrimary'
-                      gutterBottom
-                    >
-                      Capital Market Expectations:
-                    </Typography>
-
-                    <Typography
-                      className={classes.title}
-                      color='textSecondary'
-                      gutterBottom
-                    >
-                      Cash Short Term Deposits:
-                    </Typography>
-
-                    <Slider
-                      id='cmeCashSTD'
-                      name='cmeCashSTD'
-                      value={cmeCashSTD}
-                      step={5}
-                      marks
-                      min={60}
-                      max={100}
-                      valueLabelDisplay='on'
-                    />
-                    <Tooltip
-                      title='Fixed Income Securities'
-                      placement='top-start'
-                    >
-                      <Typography
-                        className={classes.title}
-                        color='textSecondary'
-                        gutterBottom
-                      >
-                        Long Term Deposits:
-                      </Typography>
-                    </Tooltip>
-                    <Slider
-                      id='cmeLTD'
-                      name='cmeLTD'
-                      value={cmeLTD}
-                      min={0}
-                      max={50}
-                      valueLabelDisplay='on'
-                    />
-                    <Typography
-                      className={classes.title}
-                      color='textSecondary'
-                      gutterBottom
-                    >
-                      Equities:
-                    </Typography>
-                    <Slider
-                      id='cmeEquities'
-                      name='cmeEquities'
-                      value={cmeEquities}
-                      min={0}
-                      max={50}
-                      valueLabelDisplay='on'
-                    />
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size='small'
-                      onClick={() =>
-                        handleClickLearn(
-                          'Model Portfolio Allocations',
-                          'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
-                        )
-                      }
-                    >
-                      Learn More
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            </Grid>
-            <Grid container item xs={12} spacing={2}>
+          <Grid item xs={12} sm={10} container spacing={2}>
+            <Grid item container spacing={2} xs={12} md={4}>
               <Grid item xs={12}>
                 <Card className={classes.card}>
                   <CardContent>
-                    <Typography className={classes.title} color='textSecondary'>
-                      Expected Return:
+                    <Typography
+                      className={classes.mainTitle}
+                      color='textPrimary'
+                      gutterBottom
+                    >
+                      General Settings:
+                    </Typography>
+
+                    <Typography
+                      className={classes.title}
+                      color='textSecondary'
+                      gutterBottom
+                    >
+                      Age at death:
                     </Typography>
 
                     <Slider
-                      id='expectedReturn'
-                      name='expectedReturn'
-                      value={expectedReturn}
+                      id='ageAtDeath'
+                      name='ageAtDeath'
+                      value={ageAtDeath}
+                      step={5}
+                      marks
+                      min={60}
+                      max={100}
+                      valueLabelDisplay='on'
+                      color='secondary'
+                    />
+                    <Typography
+                      className={classes.title}
+                      color='textSecondary'
+                      gutterBottom
+                    >
+                      Inflation of Costs:
+                    </Typography>
+                    <Slider
+                      id='costInflation'
+                      name='costInflation'
+                      value={costInflation}
                       min={0}
                       max={50}
                       valueLabelDisplay='on'
                     />
+                    <Typography
+                      className={classes.title}
+                      color='textSecondary'
+                      gutterBottom
+                    >
+                      Education Inflation:
+                    </Typography>
+                    <Slider
+                      id='eduInflation'
+                      name='eduInflation'
+                      type='number'
+                      value={eduInflation}
+                      min={0}
+                      max={50}
+                      valueLabelDisplay='on'
+                    />
+                    <Typography
+                      className={classes.title}
+                      color='textSecondary'
+                      gutterBottom
+                    >
+                      Time Horizon:
+                    </Typography>
+                    <Slider
+                      id='timeHorizon'
+                      name='timeHorizon'
+                      value={timeHorizon}
+                      min={0}
+                      max={50}
+                      valueLabelDisplay='on'
+                    />
+                    <Typography
+                      className={classes.title2}
+                      color='textSecondary'
+                      gutterBottom
+                    >
+                      Model Year End:
+                    </Typography>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <DatePicker
+                        className={classes.date}
+                        value={selectedDate}
+                        views={['year']}
+                        autoOk
+                        minDate='01.01.2050'
+                        InputProps={{
+                          className: classes.input,
+                        }}
+                      />
+                    </MuiPickersUtilsProvider>
                   </CardContent>
+                  <CardActions>
+                    <Button
+                      size='small'
+                      onClick={() =>
+                        handleClickLearn(
+                          'Age at Death',
+                          'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
+                        )
+                      }
+                    >
+                      Learn More
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            </Grid>
+            <Grid item container xs={12} md={8}>
+              <Grid item container xs={12} spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <Card className={classes.card}>
+                    <CardContent>
+                      <Typography
+                        className={classes.mainTitle}
+                        color='textPrimary'
+                        gutterBottom
+                      >
+                        Model Portfolio Allocations:
+                      </Typography>
+
+                      <Typography
+                        className={classes.title}
+                        color='textSecondary'
+                        gutterBottom
+                      >
+                        Cash Short Term Deposits:
+                      </Typography>
+
+                      <Slider
+                        id='mpaCashSTD'
+                        name='mpaCashSTD'
+                        value={mpaCashSTD}
+                        step={5}
+                        marks
+                        min={60}
+                        max={100}
+                        valueLabelDisplay='on'
+                      />
+                      <Tooltip
+                        title='Fixed Income Securities'
+                        placement='top-start'
+                      >
+                        <Typography
+                          className={classes.title}
+                          color='textSecondary'
+                          gutterBottom
+                        >
+                          Long Term Deposits:
+                        </Typography>
+                      </Tooltip>
+                      <Slider
+                        id='mpaLTD'
+                        name='mpaLTD'
+                        value={mpaLTD}
+                        min={0}
+                        max={50}
+                        valueLabelDisplay='on'
+                      />
+                      <Typography
+                        className={classes.title}
+                        color='textSecondary'
+                        gutterBottom
+                      >
+                        Equities:
+                      </Typography>
+                      <Slider
+                        id='mpaEquities'
+                        name='mpaEquities'
+                        value={mpaEquities}
+                        min={0}
+                        max={50}
+                        valueLabelDisplay='on'
+                      />
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        size='small'
+                        onClick={() =>
+                          handleClickLearn(
+                            'Model Portfolio Allocations',
+                            'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
+                          )
+                        }
+                      >
+                        Learn More
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card className={classes.card}>
+                    <CardContent>
+                      <Typography
+                        className={classes.mainTitle}
+                        color='textPrimary'
+                        gutterBottom
+                      >
+                        Capital Market Expectations:
+                      </Typography>
+
+                      <Typography
+                        className={classes.title}
+                        color='textSecondary'
+                        gutterBottom
+                      >
+                        Cash Short Term Deposits:
+                      </Typography>
+
+                      <Slider
+                        id='cmeCashSTD'
+                        name='cmeCashSTD'
+                        value={cmeCashSTD}
+                        step={5}
+                        marks
+                        min={60}
+                        max={100}
+                        valueLabelDisplay='on'
+                      />
+                      <Tooltip
+                        title='Fixed Income Securities'
+                        placement='top-start'
+                      >
+                        <Typography
+                          className={classes.title}
+                          color='textSecondary'
+                          gutterBottom
+                        >
+                          Long Term Deposits:
+                        </Typography>
+                      </Tooltip>
+                      <Slider
+                        id='cmeLTD'
+                        name='cmeLTD'
+                        value={cmeLTD}
+                        min={0}
+                        max={50}
+                        valueLabelDisplay='on'
+                      />
+                      <Typography
+                        className={classes.title}
+                        color='textSecondary'
+                        gutterBottom
+                      >
+                        Equities:
+                      </Typography>
+                      <Slider
+                        id='cmeEquities'
+                        name='cmeEquities'
+                        value={cmeEquities}
+                        min={0}
+                        max={50}
+                        valueLabelDisplay='on'
+                      />
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        size='small'
+                        onClick={() =>
+                          handleClickLearn(
+                            'Model Portfolio Allocations',
+                            'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
+                          )
+                        }
+                      >
+                        Learn More
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              </Grid>
+              <Grid container item xs={12} spacing={2}>
+                <Grid item xs={12}>
+                  <Card className={classes.card}>
+                    <CardContent>
+                      <Typography
+                        className={classes.title}
+                        color='textSecondary'
+                      >
+                        Expected Return:
+                      </Typography>
+
+                      <Slider
+                        id='expectedReturn'
+                        name='expectedReturn'
+                        value={expectedReturn}
+                        min={0}
+                        max={50}
+                        valueLabelDisplay='on'
+                      />
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item container xs={12} spacing={4}>
+              <Grid item xs={12} sm={6}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <Typography
+                      className={classes.mainTitle}
+                      color='textPrimary'
+                      gutterBottom
+                    >
+                      Children:
+                    </Typography>
+
+                    <TextField
+                      margin='dense'
+                      id='childrenAgeStart'
+                      name='childrenAgeStart'
+                      label='Age of Start Schooling'
+                      type='number'
+                      value={childrenAgeStart}
+                      inputProps={{ min: 0, max: 10 }}
+                      fullWidth
+                    />
+
+                    <TextField
+                      margin='dense'
+                      id='childrenNumYearsSchool'
+                      name='childrenNumYearsSchool'
+                      label='Number of years at school'
+                      value={childrenNumYearsSchool}
+                      type='number'
+                      inputProps={{ min: 0, max: 20 }}
+                      fullWidth
+                    />
+                    <TextField
+                      margin='dense'
+                      id='childrenSchoolEnd'
+                      name='childrenSchoolEnd'
+                      label='End of School Age '
+                      value={childrenSchoolEnd}
+                      type='number'
+                      inputProps={{ min: 0, max: 20 }}
+                      fullWidth
+                    />
+                    <TextField
+                      margin='dense'
+                      id='childrenNumYearsUni'
+                      name='childrenNumYearsUni'
+                      label='Number of years at University'
+                      value={childrenNumYearsUni}
+                      type='number'
+                      inputProps={{ min: 0, max: 20 }}
+                      fullWidth
+                    />
+                    <TextField
+                      margin='dense'
+                      id='childrenUniEnd'
+                      name='childrenUniEnd'
+                      label='End of University Age'
+                      value={childrenUniEnd}
+                      type='number'
+                      inputProps={{ min: 16, max: 40 }}
+                      fullWidth
+                    />
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size='small'
+                      onClick={() =>
+                        handleClickLearn(
+                          'Children',
+                          'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
+                        )
+                      }
+                    >
+                      Learn More
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Card className={classes.card}>
+                  <CardContent className={classes.goals}>
+                    <Typography
+                      className={classes.mainTitle}
+                      color='textPrimary'
+                      gutterBottom
+                    >
+                      Goals:
+                    </Typography>
+
+                    <TextField
+                      margin='dense'
+                      id='goalOne'
+                      name='goalOne'
+                      label='Primary Goal'
+                      value={goalOne}
+                      inputProps={{ min: 16, max: 40 }}
+                      fullWidth
+                    />
+
+                    <TextField
+                      margin='dense'
+                      id='goalTwo'
+                      name='goalTwo'
+                      label='Secondary Goal'
+                      value={goalTwo}
+                      inputProps={{ min: 16, max: 40 }}
+                      fullWidth
+                    />
+
+                    <TextField
+                      margin='dense'
+                      id='goalThree'
+                      name='goalThree'
+                      label='Teritary Goal'
+                      value={goalThree}
+                      inputProps={{ min: 16, max: 40 }}
+                      fullWidth
+                    />
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size='small'
+                      onClick={() =>
+                        handleClickLearn(
+                          'Goals',
+                          'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
+                        )
+                      }
+                    >
+                      Learn More
+                    </Button>
+                  </CardActions>
                 </Card>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item container xs={12} spacing={4}>
-            <Grid item xs={12} sm={6}>
-              <Card className={classes.card}>
-                <CardContent>
-                  <Typography
-                    className={classes.mainTitle}
-                    color='textPrimary'
-                    gutterBottom
-                  >
-                    Children:
-                  </Typography>
-
-                  <TextField
-                    margin='dense'
-                    id='childrenAgeStart'
-                    name='childrenAgeStart'
-                    label='Age of Start Schooling'
-                    type='number'
-                    value={childrenAgeStart}
-                    inputProps={{ min: 0, max: 10 }}
-                    fullWidth
-                  />
-
-                  <TextField
-                    margin='dense'
-                    id='childrenNumYearsSchool'
-                    name='childrenNumYearsSchool'
-                    label='Number of years at school'
-                    value={childrenNumYearsSchool}
-                    type='number'
-                    inputProps={{ min: 0, max: 20 }}
-                    fullWidth
-                  />
-                  <TextField
-                    margin='dense'
-                    id='childrenSchoolEnd'
-                    name='childrenSchoolEnd'
-                    label='End of School Age '
-                    value={childrenSchoolEnd}
-                    type='number'
-                    inputProps={{ min: 0, max: 20 }}
-                    fullWidth
-                  />
-                  <TextField
-                    margin='dense'
-                    id='childrenNumYearsUni'
-                    name='childrenNumYearsUni'
-                    label='Number of years at University'
-                    value={childrenNumYearsUni}
-                    type='number'
-                    inputProps={{ min: 0, max: 20 }}
-                    fullWidth
-                  />
-                  <TextField
-                    margin='dense'
-                    id='childrenUniEnd'
-                    name='childrenUniEnd'
-                    label='End of University Age'
-                    value={childrenUniEnd}
-                    type='number'
-                    inputProps={{ min: 16, max: 40 }}
-                    fullWidth
-                  />
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size='small'
-                    onClick={() =>
-                      handleClickLearn(
-                        'Children',
-                        'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
-                      )
-                    }
-                  >
-                    Learn More
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Card className={classes.card}>
-                <CardContent className={classes.goals}>
-                  <Typography
-                    className={classes.mainTitle}
-                    color='textPrimary'
-                    gutterBottom
-                  >
-                    Goals:
-                  </Typography>
-
-                  <TextField
-                    margin='dense'
-                    id='goalOne'
-                    name='goalOne'
-                    label='Primary Goal'
-                    value={goalOne}
-                    inputProps={{ min: 16, max: 40 }}
-                    fullWidth
-                  />
-
-                  <TextField
-                    margin='dense'
-                    id='goalTwo'
-                    name='goalTwo'
-                    label='Secondary Goal'
-                    value={goalTwo}
-                    inputProps={{ min: 16, max: 40 }}
-                    fullWidth
-                  />
-
-                  <TextField
-                    margin='dense'
-                    id='goalThree'
-                    name='goalThree'
-                    label='Teritary Goal'
-                    value={goalThree}
-                    inputProps={{ min: 16, max: 40 }}
-                    fullWidth
-                  />
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size='small'
-                    onClick={() =>
-                      handleClickLearn(
-                        'Goals',
-                        'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.'
-                      )
-                    }
-                  >
-                    Learn More
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          </Grid>
+          <Grid item xs={false} sm={1} />
         </Grid>
-        <Grid item xs={false} sm={1} />
-      </Grid>
 
-      <Backdrop className={classes.backdrop} open={loading}>
-        <CircularProgress color='inherit' />
-      </Backdrop>
-      <LearnMore
-        title={title}
-        open={open}
-        desc={desc}
-        handleClose={() => handleLearnClose()}
-      />
+        <Backdrop className={classes.backdrop} open={loading}>
+          <CircularProgress color='inherit' />
+        </Backdrop>
+        <LearnMore
+          title={title}
+          open={open}
+          desc={desc}
+          handleClose={() => handleLearnClose()}
+        />
+      </Grid>
     </Grid>
   );
 };

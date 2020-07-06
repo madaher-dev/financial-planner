@@ -72,7 +72,21 @@ export const editUser = (user) => async (dispatch) => {
 export const getAllUsers = () => async (dispatch) => {
   try {
     const res = await axios.get('/api/users/all');
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    //adding planner name to the data
+    for (let element of res.data) {
+      element.plannerName = await axios.post(
+        '/api/planners/plannerName',
+        { id: element.planner },
+        config
+      );
+    }
 
+    console.log(res.data);
     dispatch({ type: GET_USERS, payload: res.data });
   } catch (err) {
     dispatch({ type: USER_ERROR, payload: err.response.data });

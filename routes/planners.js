@@ -93,6 +93,25 @@ router.get('/sub', auth, async (req, res) => {
   }
 });
 
+// @route   GET api/planners/planners
+// @desc    Get Planner Name from ID
+// @access  Private
+router.post('/plannerName', auth, async (req, res) => {
+  try {
+    // check if user is an admin (from token) and show all planners
+    user = await Planner.findById(req.user.id);
+
+    if (user) {
+      const planners = await Planner.findById(req.body.id, 'name');
+
+      res.json(planners.name);
+    } else res.status(401).json({ msg: 'Unauthorized' });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route   POST api/planners/edit
 // @desc    Edit a planner
 // @access  Private
