@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+// Make Mongoose use `findOneAndUpdate()`. Note that this option is `true`
+// by default, you need to set it to false.
+mongoose.set('useFindAndModify', false);
 
 const PlannerSchema = mongoose.Schema({
   name: {
@@ -30,9 +33,11 @@ const PlannerSchema = mongoose.Schema({
   },
   title: {
     type: String,
+    default: '10',
   },
   company: {
     type: String,
+    default: 'Independent Planner',
   },
   phone: {
     type: String,

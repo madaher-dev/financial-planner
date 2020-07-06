@@ -10,6 +10,7 @@ import {
   DELETE_FAIL,
   SET_LOADING,
   GET_USERS,
+  CLEAR_USERS,
 } from './Types';
 import axios from 'axios';
 
@@ -71,6 +72,7 @@ export const editUser = (user) => async (dispatch) => {
 export const getAllUsers = () => async (dispatch) => {
   try {
     const res = await axios.get('/api/users/all');
+
     dispatch({ type: GET_USERS, payload: res.data });
   } catch (err) {
     dispatch({ type: USER_ERROR, payload: err.response.data });
@@ -88,13 +90,24 @@ export const getUsers = () => async (dispatch) => {
 };
 
 // Delete User
-export const deleteUser = (id) => async (dispatch) => {
-  try {
-    await axios.delete(`/api/users/${id}`);
-    dispatch({ type: DELETE_SUCCESS, payload: id });
-  } catch (err) {
-    dispatch({ type: DELETE_FAIL, payload: err.response.msg });
-  }
+export const deleteUser = (user) => async (dispatch) => {
+  const planner = await axios.get('/api/auth');
+
+  if (planner.data.admin) {
+    try {
+      await axios.delete(`/api/users/${user._id}`);
+      dispatch({ type: DELETE_SUCCESS, payload: user._id });
+    } catch (err) {
+      dispatch({ type: DELETE_FAIL, payload: err.response.msg });
+    }
+  } else if (user.planner === planner.data.user._id) {
+    try {
+      await axios.delete(`/api/users/${user._id}`);
+      dispatch({ type: DELETE_SUCCESS, payload: user._id });
+    } catch (err) {
+      dispatch({ type: DELETE_FAIL, payload: err.response.msg });
+    }
+  } else dispatch({ type: DELETE_FAIL, payload: 'Unauthorized' });
 };
 
 // Clear Errors
@@ -104,3 +117,6 @@ export const clearAdd = () => ({ type: CLEAR_ADD });
 
 // Set Loading
 export const setLoading = () => ({ type: SET_LOADING });
+
+// Clear Users
+export const clearUsers = () => ({ type: CLEAR_USERS });

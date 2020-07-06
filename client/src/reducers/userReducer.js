@@ -10,6 +10,7 @@ import {
   DELETE_FAIL,
   SET_LOADING,
   GET_USERS,
+  CLEAR_USERS,
 } from '../actions/Types';
 
 const initialState = {
@@ -25,6 +26,17 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case CLEAR_USERS:
+      return {
+        ...state,
+        users: [],
+        error: null,
+        add: false,
+        edit: false,
+        delete: false,
+        userLoaded: false,
+        formLoading: false,
+      };
     case USER_ERROR:
       return {
         ...state,

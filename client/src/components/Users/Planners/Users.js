@@ -3,12 +3,7 @@ import MaterialTable from 'material-table';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import UserForm from './UserForm';
-import {
-  getAllUsers,
-  getUsers,
-  deleteUser,
-  setLoading,
-} from '../../../actions/userActions';
+import { getUsers, deleteUser, setLoading } from '../../../actions/userActions';
 import Spinner from '../../layout/Spinner';
 
 import { Route } from 'react-router-dom';
@@ -30,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 const Users = ({
   users,
   match,
-  getAllUsers,
+
   getUsers,
   userLoaded,
   deleteUser,
@@ -50,21 +45,22 @@ const Users = ({
   };
   const handleClose = () => {
     setOpen(false);
-    getAllUsers();
+    getUsers();
   };
   const handleClickEdit = (user) => {
     setEdit({ edit: true, user: user });
   };
   const handleEditClose = () => {
     setEdit({ edit: false });
-    getAllUsers();
+    getUsers();
   };
 
   const handleDelete = (user) => {
     let confirmAction = window.confirm('You want to delete ' + user.firstName);
     if (confirmAction) {
       setLoading();
-      deleteUser(user._id);
+
+      deleteUser(user);
     }
   };
 
@@ -87,7 +83,7 @@ const Users = ({
     data: users,
   });
   React.useEffect(() => {
-    getAllUsers();
+    getUsers();
 
     // eslint-disable-next-line
   }, [deleted]);
@@ -152,7 +148,7 @@ const Users = ({
 Users.propTypes = {
   users: PropTypes.array,
   getUsers: PropTypes.func.isRequired,
-  getAllUsers: PropTypes.func.isRequired,
+
   userLoaded: PropTypes.bool.isRequired,
   deleteUser: PropTypes.func.isRequired,
   deleted: PropTypes.bool.isRequired,
@@ -169,7 +165,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   setLoading,
-  getAllUsers,
+
   getUsers,
   deleteUser,
 })(Users);

@@ -3,6 +3,7 @@ import {
   UPDATE_SETTINGS,
   SETTINGS_ERROR,
   SET_LOADING,
+  CLEAR_SETTINGS,
 } from '../actions/Types';
 
 const initialState = {
@@ -28,10 +29,12 @@ export default (state = initialState, action) => {
         error: null,
       };
     case SETTINGS_ERROR:
+    case CLEAR_SETTINGS:
       return {
         ...state,
         loading: false,
         error: action.payload,
+        settings: null,
       };
     case SET_LOADING:
       return {

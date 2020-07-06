@@ -9,7 +9,11 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getSettings } from '../../actions/settingsActions';
+import {
+  getCustomSettings,
+  saveSettings,
+  setLoading,
+} from '../../actions/settingsActions';
 
 import LearnMore from './LearnMore';
 import DateFnsUtils from '@date-io/date-fns';
@@ -18,6 +22,10 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 const useStyles = makeStyles((theme) => ({
   bullet: {
@@ -79,20 +87,25 @@ const useStyles = makeStyles((theme) => ({
   },
 
   goals: {
-    paddingBottom: 130,
+    paddingBottom: 125,
+  },
+  goalsField: {
+    paddingBottom: 10,
   },
 }));
 
 const SettingsRO = ({
-  getSettings,
+  getCustomSettings,
   settings,
-
+  error,
   loading,
+  saveSettings,
+  setLoading,
 }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    getSettings();
+    getCustomSettings();
 
     // eslint-disable-next-line
   }, []);
@@ -172,6 +185,30 @@ const SettingsRO = ({
     goalThree,
   } = current;
 
+  const onChange = (name) => (e, value) => {
+    setCurrent({
+      ...current,
+      [name]: value,
+    });
+  };
+  const onChangeField = (e) => {
+    setCurrent({ ...current, [e.target.id]: e.target.value });
+  };
+
+  const onChangeGoals = (e) => {
+    const keyChanged = e.target.name;
+
+    const keyWhoseValueIsRepeated = Object.keys(current).find(
+      (key) => current[key] === e.target.value
+    );
+
+    let newValues = { ...current, [keyChanged]: e.target.value };
+    if (keyWhoseValueIsRepeated) {
+      newValues[keyWhoseValueIsRepeated] = current[keyChanged];
+    }
+    setCurrent(newValues);
+  };
+
   const [learn, setLearn] = useState({
     title: '',
     desc: '',
@@ -184,6 +221,18 @@ const SettingsRO = ({
   };
   const handleLearnClose = () => {
     setLearn({ open: false, title: '', desc: '' });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setLoading();
+    current.modelYearEnd = selectedDate;
+    saveSettings(current);
+  };
+  const onReset = (e) => {
+    e.preventDefault();
+    setLoading();
+    getCustomSettings();
   };
 
   return (
@@ -216,6 +265,7 @@ const SettingsRO = ({
                     id='ageAtDeath'
                     name='ageAtDeath'
                     value={ageAtDeath}
+                    onChange={onChange('ageAtDeath')}
                     step={5}
                     marks
                     min={60}
@@ -234,6 +284,7 @@ const SettingsRO = ({
                     id='costInflation'
                     name='costInflation'
                     value={costInflation}
+                    onChange={onChange('costInflation')}
                     min={0}
                     max={50}
                     valueLabelDisplay='on'
@@ -250,6 +301,7 @@ const SettingsRO = ({
                     name='eduInflation'
                     type='number'
                     value={eduInflation}
+                    onChange={onChange('eduInflation')}
                     min={0}
                     max={50}
                     valueLabelDisplay='on'
@@ -265,6 +317,7 @@ const SettingsRO = ({
                     id='timeHorizon'
                     name='timeHorizon'
                     value={timeHorizon}
+                    onChange={onChange('timeHorizon')}
                     min={0}
                     max={50}
                     valueLabelDisplay='on'
@@ -280,6 +333,7 @@ const SettingsRO = ({
                     <DatePicker
                       className={classes.date}
                       value={selectedDate}
+                      onChange={handleDateChange}
                       views={['year']}
                       autoOk
                       minDate='01.01.2050'
@@ -330,6 +384,7 @@ const SettingsRO = ({
                       id='mpaCashSTD'
                       name='mpaCashSTD'
                       value={mpaCashSTD}
+                      onChange={onChange('mpaCashSTD')}
                       step={5}
                       marks
                       min={60}
@@ -352,6 +407,7 @@ const SettingsRO = ({
                       id='mpaLTD'
                       name='mpaLTD'
                       value={mpaLTD}
+                      onChange={onChange('mpaLTD')}
                       min={0}
                       max={50}
                       valueLabelDisplay='on'
@@ -367,6 +423,7 @@ const SettingsRO = ({
                       id='mpaEquities'
                       name='mpaEquities'
                       value={mpaEquities}
+                      onChange={onChange('mpaEquities')}
                       min={0}
                       max={50}
                       valueLabelDisplay='on'
@@ -410,6 +467,7 @@ const SettingsRO = ({
                       id='cmeCashSTD'
                       name='cmeCashSTD'
                       value={cmeCashSTD}
+                      onChange={onChange('cmeCashSTD')}
                       step={5}
                       marks
                       min={60}
@@ -432,6 +490,7 @@ const SettingsRO = ({
                       id='cmeLTD'
                       name='cmeLTD'
                       value={cmeLTD}
+                      onChange={onChange('cmeLTD')}
                       min={0}
                       max={50}
                       valueLabelDisplay='on'
@@ -447,6 +506,7 @@ const SettingsRO = ({
                       id='cmeEquities'
                       name='cmeEquities'
                       value={cmeEquities}
+                      onChange={onChange('cmeEquities')}
                       min={0}
                       max={50}
                       valueLabelDisplay='on'
@@ -480,6 +540,7 @@ const SettingsRO = ({
                       id='expectedReturn'
                       name='expectedReturn'
                       value={expectedReturn}
+                      onChange={onChange('expectedReturn')}
                       min={0}
                       max={50}
                       valueLabelDisplay='on'
@@ -508,6 +569,7 @@ const SettingsRO = ({
                     label='Age of Start Schooling'
                     type='number'
                     value={childrenAgeStart}
+                    onChange={onChangeField}
                     inputProps={{ min: 0, max: 10 }}
                     fullWidth
                   />
@@ -520,6 +582,7 @@ const SettingsRO = ({
                     value={childrenNumYearsSchool}
                     type='number'
                     inputProps={{ min: 0, max: 20 }}
+                    onChange={onChangeField}
                     fullWidth
                   />
                   <TextField
@@ -530,6 +593,7 @@ const SettingsRO = ({
                     value={childrenSchoolEnd}
                     type='number'
                     inputProps={{ min: 0, max: 20 }}
+                    onChange={onChangeField}
                     fullWidth
                   />
                   <TextField
@@ -540,6 +604,7 @@ const SettingsRO = ({
                     value={childrenNumYearsUni}
                     type='number'
                     inputProps={{ min: 0, max: 20 }}
+                    onChange={onChangeField}
                     fullWidth
                   />
                   <TextField
@@ -550,6 +615,7 @@ const SettingsRO = ({
                     value={childrenUniEnd}
                     type='number'
                     inputProps={{ min: 16, max: 40 }}
+                    onChange={onChangeField}
                     fullWidth
                   />
                 </CardContent>
@@ -578,36 +644,66 @@ const SettingsRO = ({
                   >
                     Goals:
                   </Typography>
-
-                  <TextField
-                    margin='dense'
-                    id='goalOne'
-                    name='goalOne'
-                    label='Primary Goal'
-                    value={goalOne}
-                    inputProps={{ min: 16, max: 40 }}
-                    fullWidth
-                  />
-
-                  <TextField
-                    margin='dense'
-                    id='goalTwo'
-                    name='goalTwo'
-                    label='Secondary Goal'
-                    value={goalTwo}
-                    inputProps={{ min: 16, max: 40 }}
-                    fullWidth
-                  />
-
-                  <TextField
-                    margin='dense'
-                    id='goalThree'
-                    name='goalThree'
-                    label='Teritary Goal'
-                    value={goalThree}
-                    inputProps={{ min: 16, max: 40 }}
-                    fullWidth
-                  />
+                  <FormControl fullWidth className={classes.goalsField}>
+                    <InputLabel id='goalOne-label'>Primary Goal</InputLabel>
+                    <Select
+                      labelId='goalOne'
+                      name='goalOne'
+                      id='goalOne'
+                      value={goalOne}
+                      onChange={onChangeGoals}
+                    >
+                      <MenuItem id='goalOne' value={'Retirement'}>
+                        Retirement
+                      </MenuItem>
+                      <MenuItem id='goalOne' value={'Education'}>
+                        Children Education
+                      </MenuItem>
+                      <MenuItem id='goalOne' value={'Vacation'}>
+                        Vacation
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth className={classes.goalsField}>
+                    <InputLabel id='goalTwo-label'>Secondary Goal</InputLabel>
+                    <Select
+                      labelId='goalTwo'
+                      name='goalTwo'
+                      id='goalTwo'
+                      value={goalTwo}
+                      onChange={onChangeGoals}
+                    >
+                      <MenuItem id='goalTwo' value={'Retirement'}>
+                        Retirement
+                      </MenuItem>
+                      <MenuItem id='goalTwo' value={'Education'}>
+                        Children Education
+                      </MenuItem>
+                      <MenuItem id='goalTwo' value={'Vacation'}>
+                        Vacation
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth className={classes.goalsField}>
+                    <InputLabel id='goalThree-label'>Teritary Goal</InputLabel>
+                    <Select
+                      labelId='goalThree'
+                      name='goalThree'
+                      id='goalThree'
+                      value={goalThree}
+                      onChange={onChangeGoals}
+                    >
+                      <MenuItem id='goalThree' value={'Retirement'}>
+                        Retirement
+                      </MenuItem>
+                      <MenuItem id='goalThree' value={'Education'}>
+                        Children Education
+                      </MenuItem>
+                      <MenuItem id='goalThree' value={'Vacation'}>
+                        Vacation
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
                 </CardContent>
                 <CardActions>
                   <Button
@@ -624,6 +720,32 @@ const SettingsRO = ({
                 </CardActions>
               </Card>
             </Grid>
+          </Grid>
+          <Grid
+            item
+            container
+            direction='column'
+            xs={12}
+            className={classes.buttonsCol}
+          >
+            <div>
+              <Button
+                variant='contained'
+                color='secondary'
+                onClick={onReset}
+                className={classes.buttons}
+              >
+                Reset
+              </Button>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={onSubmit}
+                className={classes.buttons}
+              >
+                Save
+              </Button>
+            </div>
           </Grid>
         </Grid>
         <Grid item xs={false} sm={1} />
@@ -643,17 +765,22 @@ const SettingsRO = ({
 };
 
 SettingsRO.propTypes = {
-  getSettings: PropTypes.func.isRequired,
+  getCustomSettings: PropTypes.func.isRequired,
   settings: PropTypes.object,
   loading: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  saveSettings: PropTypes.func.isRequired,
+  setLoading: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   settings: state.settings.settings,
-
+  error: state.settings.error,
   loading: state.settings.loading,
 });
 
 export default connect(mapStateToProps, {
-  getSettings,
+  getCustomSettings,
+  saveSettings,
+  setLoading,
 })(SettingsRO);

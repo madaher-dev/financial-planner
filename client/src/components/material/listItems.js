@@ -10,6 +10,7 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import { Link } from 'react-router-dom';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FaceIcon from '@material-ui/icons/Face';
+import EditLocationIcon from '@material-ui/icons/EditLocation';
 
 export const mainListItems = (
   <div>
@@ -84,6 +85,12 @@ export const plannerSecondaryItems = (
         <SettingsIcon />
       </ListItemIcon>
       <ListItemText primary='Global Settings' />
+    </ListItem>
+    <ListItem button to={'/planner/customsettings'} component={Link}>
+      <ListItemIcon>
+        <EditLocationIcon />
+      </ListItemIcon>
+      <ListItemText primary='Custom Settings' />
     </ListItem>
   </div>
 );

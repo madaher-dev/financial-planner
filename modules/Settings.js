@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+// Make Mongoose use `findOneAndUpdate()`. Note that this option is `true`
+// by default, you need to set it to false.
+mongoose.set('useFindAndModify', false);
 
 const SettingsSchema = mongoose.Schema({
   ageAtDeath: {
@@ -97,6 +100,10 @@ const SettingsSchema = mongoose.Schema({
   goalThree: {
     type: String,
     required: true,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'planners',
   },
 });
 

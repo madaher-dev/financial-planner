@@ -83,6 +83,7 @@ const EditForm = ({
         comments: user.comments,
         partner: user.partner,
         id: user._id,
+        planner: user.planner,
       });
     }
   }, [user]);
@@ -97,6 +98,7 @@ const EditForm = ({
     comments: '',
     id: '',
     partner: false,
+    planner: '',
   });
 
   const {

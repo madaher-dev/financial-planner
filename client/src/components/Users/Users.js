@@ -3,12 +3,7 @@ import MaterialTable from 'material-table';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import UserForm from './UserForm';
-import {
-  getAllUsers,
-  getUsers,
-  deleteUser,
-  setLoading,
-} from '../../actions/userActions';
+import { getAllUsers, deleteUser, setLoading } from '../../actions/userActions';
 import Spinner from '../layout/Spinner';
 
 import { Route } from 'react-router-dom';
@@ -31,7 +26,6 @@ const Users = ({
   users,
   match,
   getAllUsers,
-  getUsers,
   userLoaded,
   deleteUser,
   deleted,
@@ -64,7 +58,8 @@ const Users = ({
     let confirmAction = window.confirm('You want to delete ' + user.firstName);
     if (confirmAction) {
       setLoading();
-      deleteUser(user._id);
+
+      deleteUser(user);
     }
   };
 
@@ -75,8 +70,7 @@ const Users = ({
         field: 'title',
         lookup: { 10: 'Mr.', 20: 'Mrs.' },
       },
-      { title: 'First Name', field: 'firstName' },
-      { title: 'Last Name', field: 'lastName' },
+      { title: 'Name', field: 'fullName' },
       { title: 'Email', field: 'email' },
       { title: 'Occupation', field: 'occupation' },
       { title: 'Join Date', field: 'date', type: 'date' },
@@ -151,7 +145,6 @@ const Users = ({
 };
 Users.propTypes = {
   users: PropTypes.array,
-  getUsers: PropTypes.func.isRequired,
   getAllUsers: PropTypes.func.isRequired,
   userLoaded: PropTypes.bool.isRequired,
   deleteUser: PropTypes.func.isRequired,
@@ -170,6 +163,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   setLoading,
   getAllUsers,
-  getUsers,
   deleteUser,
 })(Users);

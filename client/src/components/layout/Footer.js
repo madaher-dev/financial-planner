@@ -60,11 +60,11 @@ export default function Footer() {
           </IconButton>
           <Typography variant='body2' color='inherit' align='center'>
             {'Copyright © '}
-            <Link color='inherit' href='https://material-ui.com/'>
+            <Link color='inherit' href='https://localhost:3000/'>
               Financial Planner
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {'.'} Version Beta 0.0.1
           </Typography>
           <div className={classes.grow} />
           <IconButton color='inherit'>

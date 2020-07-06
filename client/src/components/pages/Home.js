@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core';
 import PlannerWelcome from '../layout/PlannerWelcome';
 import Settings from '../Planners/SettingRO';
+import Custom from '../Planners/SettingCustom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,6 +48,11 @@ const Home = ({ match, openDrawer }) => {
           <Switch>
             <Route exact path={`${match.path}/users`} component={Users} />
             <Route exact path={`${match.path}/settings`} component={Settings} />
+            <Route
+              exact
+              path={`${match.path}/customsettings`}
+              component={Custom}
+            />
             <Route exact path={`${match.path}/`} component={PlannerWelcome} />
           </Switch>
         </Container>

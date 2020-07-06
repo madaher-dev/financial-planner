@@ -6,17 +6,31 @@ const Planner = require('../modules/Planner');
 
 // @route   GET api/settings
 // @desc    Get Global Settings
-// @access  Private
-router.get('/', auth, async (req, res) => {
+// @access  Public
+router.get('/', async (req, res) => {
   try {
-    // check if user is an admin (from token)
+    const settings = await Settings.findById('5efdb3e3acb82da111116477');
+    res.json(settings);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   GET api/settings
+// @desc    Get Global Settings
+// @access  Private
+router.get('/custom', auth, async (req, res) => {
+  try {
+    // Get Planner ID (from token)
     user = await Planner.findById(req.user.id);
 
-    // Settings for user 111111111111111111aaaaaa are considered Global
-    if (user.type === 'Admin') {
-      const settings = await Settings.findById('5efdb3e3acb82da111116477');
-      res.json(settings);
-    } else res.status(401).json({ msg: 'Unauthorized' });
+    // Settings for user 111111111111111111aaaaaa are considered Global if no custom settings found load global
+
+    let settings = await Settings.findOne({ user: user.id });
+    if (!settings)
+      settings = await Settings.findById('111111111111111111aaaaaa');
+    res.json(settings);
   } catch (err) {
     console.log(err.message);
     res.status(500).send('Server Error');
@@ -83,7 +97,14 @@ router.put('/edit', auth, async (req, res) => {
         { new: true }
       );
       res.json(updated);
-    } else res.status(401).json({ msg: 'Unauthorized' });
+    } else {
+      updated = await Settings.findOneAndUpdate(
+        { user: user.id },
+        { $set: settings },
+        { new: true, upsert: true }
+      );
+      res.json(updated);
+    }
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

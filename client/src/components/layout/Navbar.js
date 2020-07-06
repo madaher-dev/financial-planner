@@ -1,9 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-//import { logout, openDrawer } from '../../actions/userActions';
-import { clearContacts } from '../../actions/contactActions';
 import { logout, openDrawer } from '../../actions/plannerActions';
+import { clearUsers } from '../../actions/userActions';
+import { clearSettings } from '../../actions/settingsActions';
 import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import clsx from 'clsx';
@@ -79,14 +79,16 @@ const Navbar = ({
   open,
   isAuthenticated,
   isAdmin,
-  clearContacts,
+  clearSettings,
   openDrawer,
+  clearUsers,
 }) => {
   const classes = useStyles();
 
   const onLogout = () => {
     logout();
-    clearContacts();
+    clearSettings();
+    clearUsers();
   };
   function useWindowSize() {
     const isClient = typeof window === 'object';
@@ -233,8 +235,9 @@ Navbar.propTypes = {
   isAuthenticated: PropTypes.bool,
   isAdmin: PropTypes.bool,
   open: PropTypes.bool.isRequired,
-  clearContacts: PropTypes.func.isRequired,
+  clearSettings: PropTypes.func.isRequired,
   openDrawer: PropTypes.func.isRequired,
+  clearUsers: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -243,6 +246,9 @@ const mapStateToProps = (state) => ({
   open: state.planners.open,
   user: state.planners.user,
 });
-export default connect(mapStateToProps, { logout, clearContacts, openDrawer })(
-  Navbar
-);
+export default connect(mapStateToProps, {
+  clearUsers,
+  logout,
+  clearSettings,
+  openDrawer,
+})(Navbar);

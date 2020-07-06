@@ -4,12 +4,23 @@ import {
   UPDATE_SETTINGS,
   SETTINGS_ERROR,
   SET_LOADING,
+  CLEAR_SETTINGS,
 } from '../actions/Types';
 
 // Get Settings
 export const getSettings = () => async (dispatch) => {
   try {
     const settings = await axios.get('/api/settings/');
+    dispatch({ type: GET_SETTINGS, payload: settings.data });
+  } catch (err) {
+    dispatch({ type: SETTINGS_ERROR, payload: err.response.msg });
+  }
+};
+
+// Get Custom Settings
+export const getCustomSettings = () => async (dispatch) => {
+  try {
+    const settings = await axios.get('/api/settings/custom');
     dispatch({ type: GET_SETTINGS, payload: settings.data });
   } catch (err) {
     dispatch({ type: SETTINGS_ERROR, payload: err.response.msg });
@@ -34,3 +45,6 @@ export const saveSettings = (updated) => async (dispatch) => {
 
 // Set Loading
 export const setLoading = () => ({ type: SET_LOADING });
+
+// Clear Settings
+export const clearSettings = () => ({ type: CLEAR_SETTINGS });

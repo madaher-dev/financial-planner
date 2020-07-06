@@ -44,6 +44,11 @@ router.post(
       partner,
     } = req.body;
     try {
+      // check if request sent by an admin or planner (from token)
+      planner = await Planner.findById(req.user.id);
+      if (!planner) {
+        return res.status(401).json({ errors: [{ msg: 'Unauthorized' }] });
+      }
       let user = await User.findOne({ email });
 
       if (user) {
@@ -52,7 +57,6 @@ router.post(
           .json({ errors: [{ msg: 'User already exists' }] });
       }
 
-      // Notice there is not Type. Adding type will create security breach. Create new private route if needed
       user = new User({
         lastName,
         firstName,
@@ -102,6 +106,7 @@ router.get('/all', auth, async (req, res) => {
       const users = await User.find().sort({
         date: -1,
       });
+
       res.json(users);
     } else res.status(401).json({ msg: 'Unauthorized' });
   } catch (err) {
@@ -165,7 +170,7 @@ router.post(
     } = req.body;
     const userFields = {};
     if (firstName) userFields.firstName = firstName;
-    if (lastName) userFields.firstName = firstName;
+    if (lastName) userFields.lastName = lastName;
     if (email) userFields.email = email;
     if (phone) userFields.phone = phone;
     if (title) userFields.title = title;
@@ -174,7 +179,7 @@ router.post(
     userFields.partner = partner;
 
     try {
-      // check if user is an admin (from token)
+      // check if user is an admin or a planner (from token)
       user = await Planner.findById(req.user.id);
 
       if (user.type === 'Admin') {
@@ -184,7 +189,7 @@ router.post(
           { new: true }
         );
         res.json(user);
-      } else if (user.type === 'Planner' && user.id === planner) {
+      } else if (user.type === 'Planner' && planner === user.id) {
         user = await User.findByIdAndUpdate(
           id,
           { $set: userFields },
@@ -204,16 +209,10 @@ router.post(
 // @access  Private
 router.delete('/:id', auth, async (req, res) => {
   try {
-    // check if user is an admin (from token)
-    user = await Planner.findById(req.user.id);
+    // check if user is an admin or planner (from token)
+    planner = await Planner.findById(req.user.id);
 
-    if (user.type === 'Admin') {
-      let user = await User.findById(req.params.id);
-      if (!user) return res.status(404).json({ msg: 'User not found' });
-
-      await User.findByIdAndRemove(req.params.id);
-      res.json({ msg: 'User Removed' });
-    } else if (user.type === 'Planner' && user.id === planner) {
+    if (planner) {
       let user = await User.findById(req.params.id);
       if (!user) return res.status(404).json({ msg: 'User not found' });
 

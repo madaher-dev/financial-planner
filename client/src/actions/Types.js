@@ -39,6 +39,8 @@ export const SET_LOADING = 'SET_LOADING';
 export const GET_SETTINGS = 'GET_SETTINGS';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
 export const SETTINGS_ERROR = 'SETTINGS_ERROR';
+export const CLEAR_SETTINGS = 'CLEAR_SETTINGS';
 
 export const GET_USERS = 'GET_USERS';
 export const USER_ERROR = 'USER_ERROR';
+export const CLEAR_USERS = 'CLEAR_USERS';
