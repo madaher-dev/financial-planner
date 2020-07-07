@@ -127,6 +127,7 @@ const Planners = ({
             ]}
             options={{
               actionsColumnIndex: -1,
+              exportButton: true,
             }}
           />
           <PlannerForm open={open} handleClose={() => handleClose()} />

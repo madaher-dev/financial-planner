@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import EditForm from './EditForm';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Details from './Details';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -126,7 +127,10 @@ const Users = ({
             ]}
             options={{
               actionsColumnIndex: -1,
+              exportButton: true,
             }}
+            detailPanel={(rowData) => <Details rowData={rowData} />}
+            onRowClick={(event, rowData, togglePanel) => togglePanel()}
           />
           <UserForm open={open} handleClose={() => handleClose()} />
           <EditForm

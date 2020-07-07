@@ -48,6 +48,10 @@ const UserSchema = mongoose.Schema(
     partner: {
       type: Boolean,
     },
+    useDefaultSettings: {
+      type: Boolean,
+      default: true,
+    },
     planner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'planners',

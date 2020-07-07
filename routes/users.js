@@ -42,6 +42,7 @@ router.post(
       phone,
       comments,
       partner,
+      useDefaultSettings,
     } = req.body;
     try {
       // check if request sent by an admin or planner (from token)
@@ -67,6 +68,7 @@ router.post(
         partner,
         phone,
         comments,
+        useDefaultSettings,
       });
 
       const salt = await bcrypt.genSalt(10);
@@ -167,6 +169,7 @@ router.post(
       phone,
       comments,
       planner,
+      useDefaultSettings,
     } = req.body;
     const userFields = {};
     if (firstName) userFields.firstName = firstName;
@@ -177,6 +180,7 @@ router.post(
     if (occupation) userFields.occupation = occupation;
     if (comments) userFields.comments = comments;
     userFields.partner = partner;
+    userFields.useDefaultSettings = useDefaultSettings;
 
     try {
       // check if user is an admin or a planner (from token)

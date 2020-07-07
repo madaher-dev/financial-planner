@@ -78,6 +78,7 @@ const UserForm = ({
     phone: '',
     comments: '',
     partner: false,
+    useDefaultSettings: true,
   });
 
   const {
@@ -95,6 +96,7 @@ const UserForm = ({
   };
 
   const [partner, setPartner] = useState(false);
+  const [defaultSet, setDefault] = useState(true);
   const onPartnerChange = (e) => {
     if (e.target.checked) {
       setUser({ ...user, partner: true });
@@ -102,6 +104,15 @@ const UserForm = ({
     } else {
       setUser({ ...user, partner: false });
       setPartner(false);
+    }
+  };
+  const onDefaultChange = (e) => {
+    if (e.target.checked) {
+      setUser({ ...user, useDefaultSettings: true });
+      setDefault(true);
+    } else {
+      setUser({ ...user, useDefaultSettings: false });
+      setDefault(false);
     }
   };
 
@@ -115,6 +126,7 @@ const UserForm = ({
       phone: '',
       comments: '',
     });
+    setDefault(true);
     setPartner(false);
     clearAdd();
   };
@@ -244,6 +256,16 @@ const UserForm = ({
             />
           }
           label='Has partner?'
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={defaultSet}
+              onChange={onDefaultChange}
+              name='defaultSet'
+            />
+          }
+          label='Use Default Settings?'
         />
       </DialogContent>
       <DialogActions>

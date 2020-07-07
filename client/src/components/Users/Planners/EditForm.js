@@ -84,6 +84,7 @@ const EditForm = ({
         partner: user.partner,
         id: user._id,
         planner: user.planner,
+        useDefaultSettings: user.useDefaultSettings,
       });
     }
   }, [user]);
@@ -97,7 +98,6 @@ const EditForm = ({
     phone: '',
     comments: '',
     id: '',
-    partner: false,
     planner: '',
   });
 
@@ -115,6 +115,8 @@ const EditForm = ({
     setUser({ ...userData, [e.target.name]: e.target.value });
   };
   const [partnercheck, setPartner] = useState(false);
+  const [defaultSet, setDefault] = useState(true);
+
   const onPartnerChange = (e) => {
     if (e.target.checked) {
       setUser({ ...userData, partner: true });
@@ -122,6 +124,15 @@ const EditForm = ({
     } else {
       setUser({ ...userData, partner: false });
       setPartner(false);
+    }
+  };
+  const onDefaultChange = (e) => {
+    if (e.target.checked) {
+      setUser({ ...user, useDefaultSettings: true });
+      setDefault(true);
+    } else {
+      setUser({ ...user, useDefaultSettings: false });
+      setDefault(false);
     }
   };
 
@@ -249,6 +260,16 @@ const EditForm = ({
             />
           }
           label='Has partner?'
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={defaultSet}
+              onChange={onDefaultChange}
+              name='defaultSet'
+            />
+          }
+          label='Use Default Settings?'
         />
       </DialogContent>
       <DialogActions>

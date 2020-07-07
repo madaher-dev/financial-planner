@@ -86,7 +86,6 @@ export const getAllUsers = () => async (dispatch) => {
       );
     }
 
-    console.log(res.data);
     dispatch({ type: GET_USERS, payload: res.data });
   } catch (err) {
     dispatch({ type: USER_ERROR, payload: err.response.data });
